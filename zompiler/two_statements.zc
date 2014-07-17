@@ -1,0 +1,6 @@
+main_loop
+{
+	// Comment here
+	rotate(0);
+	forward();
+}

@@ -1,0 +1,1 @@
+setup.exe -q -L -R C:\cygwin

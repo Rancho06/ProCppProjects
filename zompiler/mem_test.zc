@@ -1,0 +1,10 @@
+main_loop
+{
+	memory[0] = 5;
+	rotate(0);
+	memory[0]--;
+	forward();
+	memory[0]--;
+	rotate(1);
+	memory[0]++;
+}
