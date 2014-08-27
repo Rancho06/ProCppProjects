@@ -1,9 +1,9 @@
 # ITP 435 Labs - Fall 2014 #
 
 ### PUT YOUR INFO HERE ###
-Name: Sanjay Madhav
+Name: Shu Zhou
 
-Email: madhav@usc.edu
+Email: shuzhou@usc.edu
 
 ### Directories ###
 * rle - Lab 1
