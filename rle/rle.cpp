@@ -30,6 +30,20 @@ void Part1Tests()
 int main(int argc, char* argv[])
 {
 	// Main entry point!
+	std::string inputStream;
+	int choice = 0;
+
+	std::cout << "Please choose an opotion:" << std::endl;
+	std::cout << "1. Part 1 (Tests)" << std::endl;
+	std::cout << "2. Part 2 (Single File)" << std::endl;
+	std::cout << "3. Part 3 (Directories)" << std::endl;
+	std::cout << "4. Exit" << std::endl;
+	std::cout << "> ";
+	std::getline(std::cin,inputStream);
+	
+
+
+
 	return 0;
 }
 
