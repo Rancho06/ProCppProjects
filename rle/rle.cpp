@@ -35,6 +35,18 @@ bool is_number(const std::string& s)
 	return !s.empty() && it == s.end();
 }
 
+void directoryCreate(const std::string& fileName) {
+	RLE_v2* directoryController = new RLE_v2();
+	directoryController->CreateArchive(fileName);
+	delete directoryController;
+}
+
+void directoryExtract(const std::string& fileName) {
+	RLE_v2* directoryController = new RLE_v2();
+	directoryController->ExtractArchive(fileName);
+	delete directoryController;
+}
+
 void singleFileCreate(const std::string& fileName) {
 	RLE_v1* singleFileController = new RLE_v1();
 	singleFileController->CreateArchive(fileName);
@@ -133,8 +145,18 @@ int main(int argc, char* argv[])
 						choice = std::stoi(inputString);
 						switch (choice) {
 						case 1:
+							std::cout << "Please enter the name of the directory you wish to compress: " << std::endl;
+							std::cout << "> ";
+							std::getline(std::cin, inputString);
+							std::cout << std::endl;
+							directoryCreate(inputString);
 							break;
 						case 2:
+							std::cout << "Please enter the name of the compressed directory you wish to extract: " << std::endl;
+							std::cout << "> ";
+							std::getline(std::cin, inputString);
+							std::cout << std::endl;
+							directoryExtract(inputString);
 							break;
 						case 3:
 							isPartThree = false;
