@@ -52,7 +52,6 @@ void RLE<T>::Compress(const T* input, int inSize)
 	const T* temp = input; // Temporary pointer initialized at input
 	m_Data = new T[inSize * 2]; // Memory allocation
 	int currentRunCount = 0;
-
 	// Loop while we haven't reached the end
 	while (temp < (input + inSize)) {
 		currentRunCount = 0;
@@ -76,7 +75,7 @@ void RLE<T>::Compress(const T* input, int inSize)
 		else {
 			currentRunCount = 1;
 			temp += typeSize;
-			while (*temp != *(temp + typeSize)) {
+			while ((*temp != *(temp + typeSize)) && (currentRunCount < maxRunSize)){
 				temp++;
 				currentRunCount++;
 			}
@@ -103,7 +102,7 @@ void RLE<T>::Decompress(const T* input, int inSize, int outSize)
 
 	// Loop while we haven't reached the end
 	while (temp < (input + inSize)) {
-		int runIndicator = static_cast<int>(*temp);
+		int runIndicator = static_cast<unsigned int>(*temp);
 
 		// if negative run
 		if (runIndicator < 0) {
@@ -123,8 +122,7 @@ void RLE<T>::Decompress(const T* input, int inSize, int outSize)
 			}
 			temp += typeSize;
 		}
+		
 	}
-
-
 
 }

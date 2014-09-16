@@ -34,7 +34,7 @@ void RLE_v1::CreateArchive(const std::string& source)
 		m_Header.sig[1] = 'L';
 		m_Header.sig[2] = 'E';
 		m_Header.sig[3] = 0x01;
-		m_Header.fileSize = static_cast<int>(size);
+		m_Header.fileSize = static_cast<unsigned int>(size);
 		m_Header.fileNameLength = source.length();
 		m_Header.fileName = source;
 		
