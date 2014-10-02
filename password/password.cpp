@@ -6,6 +6,11 @@
 #include "sha1.h"
 #include "passinfo.cpp"
 #include <unordered_map>
+#include <map>
+#include <algorithm>
+
+const int MAX_DIGIT = 4;
+const int CHAR_TYPE_COUNT = 36;
 
 bool isNumber(const std::string& s)
 {
@@ -40,6 +45,7 @@ void basicHash() {
 	delete info;
 }
 
+
 void loadDictionary(const std::string& fileName, std::unordered_map<std::string, pass_info*>& map) {
 
 	LARGE_INTEGER freq, before, after;
@@ -73,6 +79,113 @@ void loadDictionary(const std::string& fileName, std::unordered_map<std::string,
 }
 
 
+std::string convertToString(int* array, const int size) {
+	
+	char* password = new char[size];
+	for (int i = 0; i < size; i++) {
+		if (array[i] < 26) {
+			password[i] = array[i] + 97;
+		}
+		else {
+			password[i] = array[i] + 22;
+		}
+	}
+	std::string passString(password, size);
+	//std::cout << passString << std::endl;
+	delete password;
+	return passString;
+}
+
+
+void bruteForce(std::list<decrypt_info*>& list) {
+	std::for_each(list.begin(), list.end(), [](decrypt_info* info){
+		// use algorithm
+		for (int max = 1; max <= MAX_DIGIT; max++) {
+			int* array = new int[max];
+			for (int i = 0; i < max; i++) {
+				array[i] = 0;
+			}
+			
+			for (long long count = 0; count < std::pow(CHAR_TYPE_COUNT, max); count++) {
+				for (int i = 0; i < max; i++) {
+					int quotient = (int)(std::pow(CHAR_TYPE_COUNT, i));
+					array[i] = (count / quotient) % CHAR_TYPE_COUNT;
+				}
+
+				std::string password = convertToString(array, max);
+				//std::cout << "string: " << password << std::endl;
+				pass_info passObject;
+				hashProcess(password, &passObject);
+				if ((std::string)passObject.hex == info->hexString) {
+					info->origin = password;
+					goto STOP;
+				}
+			}
+			delete[] array;
+		}
+
+		info->origin = "????";
+		STOP:;
+	});
+}
+
+void outputToFile(std::map<long long, decrypt_info*>& map) {
+	std::ofstream fileOutput;
+	fileOutput.open("pass_solved.txt");
+	for (auto it = map.begin(); it != map.end(); it++) {
+		fileOutput << (it->second)->hexString;
+		fileOutput << ", ";
+		fileOutput << (it->second)->origin;
+		fileOutput << std::endl;
+	}
+	fileOutput.close();
+}
+
+void decrypt(const std::string& fileName, std::unordered_map< std::string, pass_info*> & map) {
+	std::string content;
+	std::ifstream fileInput;
+	long long entryNumber = 0;
+	std::map<long long, decrypt_info*> solvedMap;
+	std::list<decrypt_info*> unsolvedList;
+	fileInput.open(fileName);
+	if (fileInput.is_open()) {
+		entryNumber = 0;
+		while (!fileInput.eof()) {
+			std::getline(fileInput, content);
+			auto it = map.find(content);
+			decrypt_info* info = new decrypt_info();
+			info->entryNumber = entryNumber;
+			info->hexString = content;
+			if (it != map.end()) {
+				info->origin = map.at(content)->origin;			
+			}
+			else {			
+				unsolvedList.push_back(info);
+			}
+			solvedMap.insert(std::make_pair(entryNumber, info));
+
+			entryNumber++;
+
+		}
+		fileInput.close();
+		bruteForce(unsolvedList);
+
+		outputToFile(solvedMap);
+
+	}
+	else {
+		std::cout << "Failed to open the file: " << fileName << std::endl << std::endl;
+	}
+
+
+	// release heap memory
+	for (auto it = solvedMap.begin(); it != solvedMap.end(); it++) {
+		delete it->second;
+	}
+}
+
+
+/* code in Part2
 void decrypt(const std::string& fileName, std::unordered_map<std::string, pass_info*>& map) {
 	std::string content;
 	std::ifstream fileInput;
@@ -101,7 +214,7 @@ void decrypt(const std::string& fileName, std::unordered_map<std::string, pass_i
 	}
 
 }
-
+*/
 
 int main(int argc, char* argv[])
 {
