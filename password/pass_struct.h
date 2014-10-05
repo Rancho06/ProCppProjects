@@ -1,3 +1,7 @@
+#ifndef PASS_STRUCT_H
+#define PASS_STRUCT_H
+
+
 #include <iostream>
 
 struct pass_info {
@@ -7,7 +11,9 @@ struct pass_info {
 };
 
 struct decrypt_info {
-	long long entryNumber;
+	int entryNumber;
 	std::string hexString;
 	std::string origin;
 };
+
+#endif
