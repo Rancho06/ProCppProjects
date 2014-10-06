@@ -1,5 +1,8 @@
 // password.cpp : Defines the entry point for the console application.
 //
+/*
+@copyright: Shu Zhou, Fall 2014
+*/
 #include <iostream>
 #include "CommandManager.h"
 #include "PassDecoder.h"

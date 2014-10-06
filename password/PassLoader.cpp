@@ -1,5 +1,8 @@
-#include "PassLoader.h"
+/*
+@copyright: Shu Zhou, Fall 2014
+*/
 
+#include "PassLoader.h"
 
 PassLoader::PassLoader()
 {
@@ -9,7 +12,6 @@ PassLoader::PassLoader()
 std::unordered_map<std::string, pass_info*>& PassLoader::getMap() {
 	return *(this->map);
 }
-
 
 void hashProcess(const std::string& password, pass_info* info) {
 	info->origin = password;
