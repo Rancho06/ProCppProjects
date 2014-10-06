@@ -30,17 +30,10 @@ void doHash(const std::string& password, pass_info* info) {
 }
 
 // compare given hex string with the hex value inside unsolvedList
-void compareHex(std::vector<decrypt_info*>& list, const std::string& hex, int start, int end, pass_info& object) {
-	if (start + 1 >= end) {
-		if (list.at(start)->hexString == hex) {
-			list.at(start)->origin = object.origin;
-		}
-		return;
+void compareHex(decrypt_info* info, const std::string& hex, pass_info& object) {
+	if (info->hexString == hex) {
+		info->origin = object.origin;
 	}
-	Concurrency::parallel_invoke(
-		[&list, &hex, start, end, &object]{compareHex(list, hex, start, (start + end) / 2, object); },
-		[&list, &hex, start, end, &object]{compareHex(list, hex, (start + end) / 2, end, object); }
-	);
 }
 
 // write all the hex and password into a file
@@ -58,31 +51,35 @@ void outputToFile(std::map<int, decrypt_info*>& map) {
 
 PassDecoder::~PassDecoder(){}
 
-// convert "start" into a string and check that string
-void computeHex(int max, int start, int end, std::vector<decrypt_info*>& unsolvedList) {
-	if (start + 1 >= end) {
-		int* array = new int[max];
-		for (int i = 0; i < max; i++) {
-			int quotient = (int)(std::pow(CHAR_TYPE_COUNT, i));
-			array[i] = (start / quotient) % CHAR_TYPE_COUNT;
+// convert integers into corresponding strings using given algorithm
+void computeHex(int size, int start, int end, std::vector<decrypt_info*>& list) {
+	int* array = new int[size];
+	for (int MSB = start; MSB < end; MSB++) {
+		array[size - 1] = MSB;
+		for (int i = size - 2; i >= 0; i--) {
+			array[i] = 0;
 		}
-		std::string password = convertToString(array, max);
-		pass_info passObject;
-		doHash(password, &passObject);
-		std::string hex(passObject.hex, 40);
-		compareHex(unsolvedList, hex, 0, unsolvedList.size(), passObject);
-		delete[] array;
-		return;
+		bool isMax;
+		do {
+			isMax = true;
+			for (int i = 0; i < size - 1; i++) {
+				if (array[i] == 36) {
+					array[i] = 0;
+					array[i + 1] += 1;
+				}
+				isMax = isMax && (array[i] == 35);
+			}
+			std::string password = convertToString(array, size);
+			pass_info passObject;
+			doHash(password, &passObject);
+			std::string hex(passObject.hex, 40);
+			Concurrency::parallel_for_each(list.begin(), list.end(), [hex, &passObject](decrypt_info* info){
+				compareHex(info, hex, passObject);
+			});
+			++(array[0]);
+		} while (!isMax);
 	}
-	int step = (end - start) / 6;
-	Concurrency::parallel_invoke(
-		[start, step, max, &unsolvedList]{computeHex(max, start, start + step, unsolvedList); },
-		[start, step, max, &unsolvedList]{computeHex(max, start + step, start + step * 2, unsolvedList); },
-		[start, step, max, &unsolvedList]{computeHex(max, start + step * 2, start + step * 3, unsolvedList); },
-		[start, step, max, &unsolvedList]{computeHex(max, start + step * 3, start + step * 4, unsolvedList); },
-		[start, step, max, &unsolvedList]{computeHex(max, start + step * 4, start + step * 5, unsolvedList); },
-		[start, step, max, &unsolvedList]{computeHex(max, start + step * 5, start + step * 6, unsolvedList); }
-	);
+	delete[] array;
 }
 
 // handle the whole process of password decryption
@@ -116,12 +113,16 @@ void PassDecoder::decrypt(const std::string& fileName, const std::unordered_map<
 		LARGE_INTEGER freq, before, after;
 		QueryPerformanceFrequency(&freq);
 		QueryPerformanceCounter(&before);
-
-		for (int max = 1; max <= MAX_DIGIT; max++) {
-			int totalCount = (int)std::pow(CHAR_TYPE_COUNT, max);
-			computeHex(max, 0, totalCount, unsolvedList);
+		for (int max = 1; max <= MAX_DIGIT; max++) {			
+			Concurrency::parallel_invoke(
+				[max, &unsolvedList]{computeHex(max, 0, 6, unsolvedList); },
+				[max, &unsolvedList]{computeHex(max, 6, 12, unsolvedList); },
+				[max, &unsolvedList]{computeHex(max, 12, 18, unsolvedList); },
+				[max, &unsolvedList]{computeHex(max, 18, 24, unsolvedList); },
+				[max, &unsolvedList]{computeHex(max, 24, 30, unsolvedList); },
+				[max, &unsolvedList]{computeHex(max, 30, 36, unsolvedList); }
+			);
 		}
-
 		QueryPerformanceCounter(&after);
 		float fElapsed = static_cast<float>(after.QuadPart - before.QuadPart) / freq.QuadPart;
 		// end timing
