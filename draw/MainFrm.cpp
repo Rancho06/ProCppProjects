@@ -110,3 +110,16 @@ LRESULT CMainFrame::OnAppAbout(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 	dlg.DoModal();
 	return 0;
 }
+
+LRESULT CMainFrame::OnPenColor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	Gdiplus::Color currentColor;
+	m_view.m_Pen.GetColor(&currentColor);
+	COLORREF color = currentColor.ToCOLORREF();
+	CColorDialog test(color);
+	test.DoModal();
+	color = test.GetColor();
+	Gdiplus::Color newColor(GetRValue(color), GetGValue(color), GetBValue(color));
+	m_view.m_Pen.SetColor(newColor);
+	return 0;
+}

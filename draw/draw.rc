@@ -99,6 +99,10 @@ BEGIN
         MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
         MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
     END
+    POPUP "&Pen"
+    BEGIN
+        MENUITEM "&Color",                      ID_PEN_COLOR
+    END
     POPUP "&View"
     BEGIN
         MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
