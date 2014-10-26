@@ -33,6 +33,12 @@ public:
 		COMMAND_ID_HANDLER(ID_VIEW_STATUS_BAR, OnViewStatusBar)
 		COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAppAbout)
 		COMMAND_ID_HANDLER(ID_PEN_COLOR, OnPenColor)
+		COMMAND_ID_HANDLER(ID_WIDTH_0, OnWidthChange)
+		COMMAND_ID_HANDLER(ID_WIDTH_1, OnWidthChange)
+		COMMAND_ID_HANDLER(ID_WIDTH_2, OnWidthChange)
+		COMMAND_ID_HANDLER(ID_WIDTH_3, OnWidthChange)
+		COMMAND_ID_HANDLER(ID_WIDTH_4, OnWidthChange)
+		COMMAND_ID_HANDLER(ID_WIDTH_5, OnWidthChange)
 		CHAIN_MSG_MAP(CUpdateUI<CMainFrame>)
 		CHAIN_MSG_MAP(CFrameWindowImpl<CMainFrame>)
 	END_MSG_MAP()
@@ -50,4 +56,5 @@ public:
 	LRESULT OnViewStatusBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnAppAbout(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnPenColor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnWidthChange(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 };

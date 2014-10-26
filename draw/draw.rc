@@ -102,6 +102,15 @@ BEGIN
     POPUP "&Pen"
     BEGIN
         MENUITEM "&Color",                      ID_PEN_COLOR
+        POPUP "&Width"
+        BEGIN
+            MENUITEM "0.5",                         ID_WIDTH_0
+            MENUITEM "1.0",                         ID_WIDTH_1, CHECKED
+            MENUITEM "1.5",                         ID_WIDTH_2
+            MENUITEM "2.0",                         ID_WIDTH_3
+            MENUITEM "2.5",                         ID_WIDTH_4
+            MENUITEM "5",                           ID_WIDTH_5
+        END
     END
     POPUP "&View"
     BEGIN

@@ -123,3 +123,40 @@ LRESULT CMainFrame::OnPenColor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 	m_view.m_Pen.SetColor(newColor);
 	return 0;
 }
+
+
+LRESULT CMainFrame::OnWidthChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_0, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_1, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_2, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_3, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_4, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_5, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(wID, MF_CHECKED);
+	switch (wID) {
+		case ID_WIDTH_0:
+			m_view.m_Pen.SetWidth(0.5f);
+			break;
+		case ID_WIDTH_1:
+			m_view.m_Pen.SetWidth(1.0f);
+			break;
+		case ID_WIDTH_2:
+			m_view.m_Pen.SetWidth(1.5f);
+			break;
+		case ID_WIDTH_3:
+			m_view.m_Pen.SetWidth(2.0f);
+			break;
+		case ID_WIDTH_4:
+			m_view.m_Pen.SetWidth(2.5f);
+			break;
+		case ID_WIDTH_5:
+			m_view.m_Pen.SetWidth(5.0f);
+			break;
+		default:
+			m_view.m_Pen.SetWidth(1.0f);
+			break;
+	}
+
+	return 0;
+}

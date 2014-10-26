@@ -11,7 +11,7 @@ using namespace Gdiplus;
 CDrawView::CDrawView()
 	: m_BitmapImage(1024, 768)
 	, m_GraphicsImage(&m_BitmapImage)
-	, m_Pen(Color(0, 0, 0), 2.0f)
+	, m_Pen(Color(0, 0, 0), 1.0f)
 {
 	//Pen pen(Color(0, 0, 255));
 	//m_GraphicsImage.DrawLine(&pen, 0, 0, 200, 100);
