@@ -34,11 +34,14 @@ LRESULT CDrawView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 }
 
 LRESULT CDrawView::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
+{	
+	m_Shape = std::make_shared<Line>();
+	std::shared_ptr<Pen> myPen(m_Pen.Clone());
+	m_Shape.get()->m_Pen = myPen;
 	int xPos = GET_X_LPARAM(lParam);
 	int yPos = GET_Y_LPARAM(lParam);
-	m_StartPoint.X = xPos;
-	m_StartPoint.Y = yPos;
+	m_Shape.get()->m_StartPoint.X = xPos;
+	m_Shape.get()->m_StartPoint.Y = yPos;
 	return 0;
 }
 
@@ -46,10 +49,11 @@ LRESULT CDrawView::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 {
 	int xPos = GET_X_LPARAM(lParam);
 	int yPos = GET_Y_LPARAM(lParam);
-	m_EndPoint.X = xPos;
-	m_EndPoint.Y = yPos;
-	m_GraphicsImage.DrawLine(&m_Pen, m_StartPoint.X, m_StartPoint.Y, m_EndPoint.X, m_EndPoint.Y);
+	m_Shape.get()->m_EndPoint.X = xPos;
+	m_Shape.get()->m_EndPoint.Y = yPos;
+	m_Shape.get()->draw(m_GraphicsImage);
 	RedrawWindow();
+	m_Shape.reset();
 	return 0;
 }
 

@@ -3,7 +3,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
+#include <memory>
+#include "Line.h"
 class CDrawView : public CScrollWindowImpl<CDrawView>
 {
 public:
@@ -35,4 +36,5 @@ public:
 	Gdiplus::Point m_EndPoint;
 	Gdiplus::Bitmap m_BitmapImage;
 	Gdiplus::Graphics m_GraphicsImage;
+	std::shared_ptr<Shape> m_Shape;
 };
