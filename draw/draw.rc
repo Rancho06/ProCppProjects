@@ -95,9 +95,9 @@ BEGIN
     BEGIN
         MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
         MENUITEM SEPARATOR
-        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
-        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
-        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT, INACTIVE
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY, INACTIVE
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE, INACTIVE
     END
     POPUP "&Pen"
     BEGIN
