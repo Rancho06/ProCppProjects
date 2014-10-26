@@ -13,12 +13,12 @@ Shape::~Shape()
 {
 }
 
-/*void Shape::setPen(Gdiplus::Pen& pen) {
-
+void Shape::setPen(std::shared_ptr<Gdiplus::Pen>& pen) {
+	this->m_Pen = pen;
 }
 void Shape::setStartPoint(Gdiplus::Point& point) {
-
+	this->m_StartPoint = point;
 }
 void Shape::setEndPoint(Gdiplus::Point& point) {
-
-}*/
+	this->m_EndPoint = point;
+}
