@@ -30,7 +30,9 @@ public:
 	LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	CDrawView();
-
+	Gdiplus::Pen m_Pen;
+	Gdiplus::Point m_StartPoint;
+	Gdiplus::Point m_EndPoint;
 	Gdiplus::Bitmap m_BitmapImage;
 	Gdiplus::Graphics m_GraphicsImage;
 };

@@ -78,7 +78,8 @@ LRESULT CMainFrame::OnFileExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 LRESULT CMainFrame::OnFileNew(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
 	// TODO: add code to initialize document
-
+	m_view.m_GraphicsImage.Clear(Gdiplus::Color(255, 255, 255));
+	m_view.RedrawWindow();
 	return 0;
 }
 
