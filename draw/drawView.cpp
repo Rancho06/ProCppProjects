@@ -30,6 +30,9 @@ LRESULT CDrawView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 	//TODO: Add your drawing code here
 	Graphics graphics(dc);
 	graphics.DrawImage(&m_BitmapImage, 0, 0);
+	if (m_Shape) {
+		m_Shape.get()->draw(graphics);
+	}
 	return 0;
 }
 
@@ -57,5 +60,13 @@ LRESULT CDrawView::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 LRESULT CDrawView::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
+	if (m_Shape) {
+		int xPos = GET_X_LPARAM(lParam);
+		int yPos = GET_Y_LPARAM(lParam);
+		m_Shape.get()->setEndPoint(Point(xPos, yPos));
+		m_Shape.get()->draw(m_GraphicsImage);
+		RedrawWindow();
+		m_Shape.get()->setStartPoint(Point(xPos, yPos));
+	}
 	return 0;
 }
