@@ -8,6 +8,7 @@
 #include "aboutdlg.h"
 #include "drawView.h"
 #include "MainFrm.h"
+#include <atlstr.h>
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
@@ -80,6 +81,29 @@ LRESULT CMainFrame::OnFileNew(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
 	// TODO: add code to initialize document
 	m_view.m_GraphicsImage.Clear(Gdiplus::Color(255, 255, 255));
 	m_view.RedrawWindow();
+	m_view.fileIsSaved = false;
+	m_view.currentFileName = "";
+	m_view.undoLists.clear();
+	m_view.redoLists.clear();
+	return 0;
+}
+
+
+LRESULT CMainFrame::OnFileOpen(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	CFileDialog fileDlg(true, _T("PNG"), NULL,
+		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("PNG Format\0*.PNG\0"));
+
+	if (IDOK == fileDlg.DoModal()) {
+		m_view.currentFileName = fileDlg.m_szFileName;
+		Gdiplus::Bitmap myFile(CA2W(m_view.currentFileName.c_str()));
+		m_view.m_GraphicsImage.Clear(Gdiplus::Color(255, 255, 255));
+		m_view.m_GraphicsImage.DrawImage(&myFile, 0, 0);
+		m_view.RedrawWindow();
+		m_view.undoLists.clear();
+		m_view.redoLists.clear();
+		m_view.fileIsSaved = true;
+	}
 	return 0;
 }
 
@@ -208,5 +232,44 @@ LRESULT CMainFrame::OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 		m_view.redoLists.pop_back();
 		m_view.RedrawWindow();
 	}	
+	return 0;
+}
+
+LRESULT CMainFrame::OnFileSave(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	if (!m_view.fileIsSaved) {
+		CFileDialog fileDlg(false, _T("PNG"), _T("image.PNG"),
+			NULL, _T("PNG Format\0*.PNG\0"));
+
+		if (IDOK == fileDlg.DoModal()) {
+			m_view.currentFileName = fileDlg.m_szFileName;
+			CLSID pngClsid;
+			CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid);
+			m_view.m_BitmapImage.Save(CA2W(m_view.currentFileName.c_str()), &pngClsid);
+			m_view.fileIsSaved = true;
+		}
+	}
+	else {
+		CLSID pngClsid;
+		CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid);
+		m_view.m_BitmapImage.Save(CA2W(m_view.currentFileName.c_str()), &pngClsid);
+	}
+	
+	return 0;
+}
+
+LRESULT CMainFrame::OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	CFileDialog fileDlg(false, _T("PNG"), _T("image.PNG"),
+		NULL, _T("PNG Format\0*.PNG\0"));
+
+	if (IDOK == fileDlg.DoModal()) {
+		m_view.currentFileName = fileDlg.m_szFileName;
+		CLSID pngClsid;
+		CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid); 
+		m_view.m_BitmapImage.Save(CA2W(m_view.currentFileName.c_str()), &pngClsid);
+		m_view.fileIsSaved = true;
+	}
+
 	return 0;
 }

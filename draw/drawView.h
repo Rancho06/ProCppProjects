@@ -34,6 +34,8 @@ public:
 	LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	CDrawView();
+	bool fileIsSaved;
+	std::string currentFileName;
 	Gdiplus::Pen m_Pen;
 	Gdiplus::Point m_StartPoint;
 	Gdiplus::Point m_EndPoint;
