@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-
+#include <iostream>
 #include "aboutdlg.h"
 #include "drawView.h"
 #include "MainFrm.h"
@@ -157,6 +157,56 @@ LRESULT CMainFrame::OnWidthChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 			m_view.m_Pen.SetWidth(1.0f);
 			break;
 	}
+	return 0;
+}
 
+LRESULT CMainFrame::OnShapeChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	m_CmdBar.GetMenu().CheckMenuItem(ID_SHAPE_LINE, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_SHAPE_ELLIPSE, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(ID_SHAPE_RECTANGLE, MF_UNCHECKED);
+	m_CmdBar.GetMenu().CheckMenuItem(wID, MF_CHECKED);
+	switch (wID) {
+		case ID_SHAPE_LINE:
+			m_view.shapeType = CDrawView::LINE;
+			break;
+		case ID_SHAPE_ELLIPSE:
+			m_view.shapeType = CDrawView::ELLIPSE;
+			break;
+		case ID_SHAPE_RECTANGLE:
+			m_view.shapeType = CDrawView::RECTANGLE;
+			break;
+		default:
+			m_view.shapeType = CDrawView::LINE;
+			break;
+	}
+	return 0;
+}
+
+LRESULT CMainFrame::OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	if (m_view.undoLists.size() != 0) {
+		
+		m_view.redoLists.push_back(m_view.undoLists.back());
+		m_view.undoLists.pop_back();
+		m_view.m_GraphicsImage.Clear(Gdiplus::Color(255, 255, 255));
+		
+		for (auto it = m_view.undoLists.begin(); it != m_view.undoLists.end(); it++) {
+			it->get()->draw(m_view.m_GraphicsImage);
+		}
+		m_view.RedrawWindow();
+	}	
+	return 0;
+}
+
+LRESULT CMainFrame::OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	
+	if (m_view.redoLists.size() != 0) {
+		m_view.undoLists.push_back(m_view.redoLists.back());
+		m_view.redoLists.back().get()->draw(m_view.m_GraphicsImage);
+		m_view.redoLists.pop_back();
+		m_view.RedrawWindow();
+	}	
 	return 0;
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include "Shape.h"
-class Line :
+class MyEllipse :
 	public Shape
 {
 public:
+	MyEllipse();
+	~MyEllipse();
 	void draw(Gdiplus::Graphics&);
-	Line();
-	~Line();
 };
 

@@ -1,17 +1,17 @@
 #include "stdafx.h"
-#include "Line.h"
+#include "MyLine.h"
 
 
-Line::Line()
+MyLine::MyLine()
 {
 }
 
 
-Line::~Line()
+MyLine::~MyLine()
 {
 }
 
 
-void Line::draw(Gdiplus::Graphics& graphics) {
+void MyLine::draw(Gdiplus::Graphics& graphics) {
 	graphics.DrawLine(m_Pen.get(), m_StartPoint.X, m_StartPoint.Y, m_EndPoint.X, m_EndPoint.Y);
 }

@@ -33,12 +33,17 @@ public:
 		COMMAND_ID_HANDLER(ID_VIEW_STATUS_BAR, OnViewStatusBar)
 		COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAppAbout)
 		COMMAND_ID_HANDLER(ID_PEN_COLOR, OnPenColor)
+		COMMAND_ID_HANDLER(ID_EDIT_UNDO, OnEditUndo)
+		COMMAND_ID_HANDLER(ID_EDIT_REDO, OnEditRedo)
 		COMMAND_ID_HANDLER(ID_WIDTH_0, OnWidthChange)
 		COMMAND_ID_HANDLER(ID_WIDTH_1, OnWidthChange)
 		COMMAND_ID_HANDLER(ID_WIDTH_2, OnWidthChange)
 		COMMAND_ID_HANDLER(ID_WIDTH_3, OnWidthChange)
 		COMMAND_ID_HANDLER(ID_WIDTH_4, OnWidthChange)
 		COMMAND_ID_HANDLER(ID_WIDTH_5, OnWidthChange)
+		COMMAND_ID_HANDLER(ID_SHAPE_LINE, OnShapeChange)
+		COMMAND_ID_HANDLER(ID_SHAPE_ELLIPSE, OnShapeChange)
+		COMMAND_ID_HANDLER(ID_SHAPE_RECTANGLE, OnShapeChange)
 		CHAIN_MSG_MAP(CUpdateUI<CMainFrame>)
 		CHAIN_MSG_MAP(CFrameWindowImpl<CMainFrame>)
 	END_MSG_MAP()
@@ -57,4 +62,7 @@ public:
 	LRESULT OnAppAbout(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnPenColor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnWidthChange(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnShapeChange(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 };

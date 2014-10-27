@@ -13,13 +13,18 @@
 #define ID_WIDTH_3                      32781
 #define ID_WIDTH_4                      32782
 #define ID_WIDTH_5                      32783
+#define ID_EDIT_REDO32784               32784
+#define ID_SHAPE_LINE                   32787
+#define ID_SHAPE_ELLIPSE                32788
+#define ID_SHAPE_RECTANGLE              32789
+#define ID_BUTTON32792                  32792
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201
-#define _APS_NEXT_COMMAND_VALUE         32784
+#define _APS_NEXT_COMMAND_VALUE         32793
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

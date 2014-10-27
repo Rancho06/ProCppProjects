@@ -4,14 +4,17 @@
 
 #pragma once
 #include <memory>
-#include "Line.h"
+#include <list>
+#include "MyLine.h"
+#include "MyEllipse.h"
+#include "MyRectangle.h"
+
 class CDrawView : public CScrollWindowImpl<CDrawView>
 {
 public:
 	DECLARE_WND_CLASS(NULL)
 
 	BOOL PreTranslateMessage(MSG* pMsg);
-
 	BEGIN_MSG_MAP(CDrawView)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
 		MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
@@ -37,4 +40,8 @@ public:
 	Gdiplus::Bitmap m_BitmapImage;
 	Gdiplus::Graphics m_GraphicsImage;
 	std::shared_ptr<Shape> m_Shape;
+	std::list<std::shared_ptr<Shape>> undoLists;
+	std::list<std::shared_ptr<Shape>> redoLists;
+	enum SHAPETYPE{LINE, ELLIPSE, RECTANGLE};
+	SHAPETYPE shapeType;
 };
