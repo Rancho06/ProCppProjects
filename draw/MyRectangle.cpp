@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MyRectangle.h"
 
-
 MyRectangle::MyRectangle()
 {
 }
@@ -11,7 +10,7 @@ MyRectangle::~MyRectangle()
 {
 }
 
-
+// overload the pure virtual draw() from base class
 void MyRectangle::draw(Gdiplus::Graphics& graphics) {
 	int xTopLeft, yTopLeft, width, height;
 	int xStart = m_StartPoint.X;

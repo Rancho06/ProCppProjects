@@ -7,27 +7,28 @@
 #include "drawView.h"
 using namespace Gdiplus;
 
+// implement the factory method for creating a particular shape
 class ShapeMaker {
 public:
 	static std::shared_ptr<Shape> createShape(CDrawView::SHAPETYPE shapeType) {
 		switch (shapeType) {
-		case CDrawView::LINE:
-			return std::make_shared<MyLine>();
-			break;
-		case CDrawView::ELLIPSE:
-			return std::make_shared<MyEllipse>();
-			break;
-		case CDrawView::RECTANGLE:
-			return std::make_shared<MyRectangle>();
-			break;
-		default:
-			return std::make_shared<MyLine>();
-			break;
+			case CDrawView::LINE:
+				return std::make_shared<MyLine>();
+				break;
+			case CDrawView::ELLIPSE:
+				return std::make_shared<MyEllipse>();
+				break;
+			case CDrawView::RECTANGLE:
+				return std::make_shared<MyRectangle>();
+				break;
+			default:
+				return std::make_shared<MyLine>();
+				break;
 		}
 	}
 };
 
-
+// constructor
 CDrawView::CDrawView()
 	: m_BitmapImage(1024, 768)
 	, m_GraphicsImage(&m_BitmapImage)
@@ -44,6 +45,8 @@ BOOL CDrawView::PreTranslateMessage(MSG* pMsg)
 	return FALSE;
 }
 
+
+// paint it while pen on move for previewing
 LRESULT CDrawView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
 	CPaintDC dc(m_hWnd);
@@ -55,6 +58,7 @@ LRESULT CDrawView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 	return 0;
 }
 
+// set up start point when pressing down the mouse button
 LRESULT CDrawView::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {	
 	m_Shape = ShapeMaker::createShape(shapeType);
@@ -67,6 +71,7 @@ LRESULT CDrawView::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	return 0;
 }
 
+// set up the end point and finalize the shape after releasing the mouse button
 LRESULT CDrawView::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	int xPos = GET_X_LPARAM(lParam);
@@ -81,6 +86,7 @@ LRESULT CDrawView::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	return 0;
 }
 
+// provide previewing while mouse is moving & pressed
 LRESULT CDrawView::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	if (m_Shape) {

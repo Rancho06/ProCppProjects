@@ -1,7 +1,12 @@
+/*
+	This class implements the flyweight design patter for Pen class.
+*/
+
 #pragma once
 #include "singleton.h"
 #include <unordered_map>
 #include <memory>
+
 class PenWeight :
 	public Singleton<PenWeight>
 {

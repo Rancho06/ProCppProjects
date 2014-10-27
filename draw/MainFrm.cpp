@@ -8,7 +8,6 @@
 #include "aboutdlg.h"
 #include "drawView.h"
 #include "MainFrm.h"
-#include <atlstr.h>
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
@@ -78,7 +77,7 @@ LRESULT CMainFrame::OnFileExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnFileNew(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
-	// TODO: add code to initialize document
+	// reset to a new blank graphics draw board
 	m_view.m_GraphicsImage.Clear(Gdiplus::Color(255, 255, 255));
 	m_view.RedrawWindow();
 	m_view.fileIsSaved = false;
@@ -91,9 +90,9 @@ LRESULT CMainFrame::OnFileNew(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
 
 LRESULT CMainFrame::OnFileOpen(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// load an existing file to drawboard
 	CFileDialog fileDlg(true, _T("PNG"), NULL,
 		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("PNG Format\0*.PNG\0"));
-
 	if (IDOK == fileDlg.DoModal()) {
 		m_view.currentFileName = fileDlg.m_szFileName;
 		Gdiplus::Bitmap myFile(CA2W(m_view.currentFileName.c_str()));
@@ -137,6 +136,7 @@ LRESULT CMainFrame::OnAppAbout(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnPenColor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// allow users to choose an arbitrary pen color
 	Gdiplus::Color currentColor;
 	m_view.m_Pen.GetColor(&currentColor);
 	COLORREF color = currentColor.ToCOLORREF();
@@ -151,6 +151,7 @@ LRESULT CMainFrame::OnPenColor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnWidthChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// allow users to change the pen width
 	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_0, MF_UNCHECKED);
 	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_1, MF_UNCHECKED);
 	m_CmdBar.GetMenu().CheckMenuItem(ID_WIDTH_2, MF_UNCHECKED);
@@ -186,6 +187,7 @@ LRESULT CMainFrame::OnWidthChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 
 LRESULT CMainFrame::OnShapeChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// allow users to change the shape they want to draw
 	m_CmdBar.GetMenu().CheckMenuItem(ID_SHAPE_LINE, MF_UNCHECKED);
 	m_CmdBar.GetMenu().CheckMenuItem(ID_SHAPE_ELLIPSE, MF_UNCHECKED);
 	m_CmdBar.GetMenu().CheckMenuItem(ID_SHAPE_RECTANGLE, MF_UNCHECKED);
@@ -209,6 +211,7 @@ LRESULT CMainFrame::OnShapeChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 
 LRESULT CMainFrame::OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// undo the previous drawing command
 	if (m_view.undoLists.size() != 0) {		
 		m_view.redoLists.push_back(m_view.undoLists.back());
 		m_view.undoLists.pop_back();
@@ -223,6 +226,7 @@ LRESULT CMainFrame::OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// redo the previous drawing command
 	if (m_view.redoLists.size() != 0) {
 		m_view.undoLists.push_back(m_view.redoLists.back());
 		m_view.redoLists.back().get()->draw(m_view.m_GraphicsImage);
@@ -234,6 +238,7 @@ LRESULT CMainFrame::OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnFileSave(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// if the file has not been saved yet, a dialog pops up
 	if (!m_view.fileIsSaved) {
 		CFileDialog fileDlg(false, _T("PNG"), _T("image.PNG"),
 			NULL, _T("PNG Format\0*.PNG\0"));
@@ -245,6 +250,7 @@ LRESULT CMainFrame::OnFileSave(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 			m_view.fileIsSaved = true;
 		}
 	}
+	// if the file has been saved, silently save it
 	else {
 		CLSID pngClsid;
 		CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid);
@@ -255,6 +261,7 @@ LRESULT CMainFrame::OnFileSave(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+	// use file dialog to ask for file name and save the file
 	CFileDialog fileDlg(false, _T("PNG"), _T("image.PNG"),
 		NULL, _T("PNG Format\0*.PNG\0"));
 	if (IDOK == fileDlg.DoModal()) {

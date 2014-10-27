@@ -33,8 +33,8 @@ public:
 	LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-
 	CDrawView();
+
 	bool fileIsSaved;
 	std::string currentFileName;
 	Gdiplus::Pen m_Pen;

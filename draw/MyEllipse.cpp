@@ -11,7 +11,7 @@ MyEllipse::~MyEllipse()
 {
 }
 
-
+// overload the pure virtual draw() from base class
 void MyEllipse::draw(Gdiplus::Graphics& graphics) {
 	int xTopLeft, yTopLeft, width, height;
 	int xStart = m_StartPoint.X;

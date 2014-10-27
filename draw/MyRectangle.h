@@ -1,3 +1,7 @@
+/*
+	This class is used to draw a rectangle
+*/
+
 #pragma once
 #include "Shape.h"
 class MyRectangle :

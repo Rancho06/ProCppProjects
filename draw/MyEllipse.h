@@ -1,3 +1,7 @@
+/*
+	This class is used to draw a ellipse
+*/
+
 #pragma once
 #include "Shape.h"
 class MyEllipse :
