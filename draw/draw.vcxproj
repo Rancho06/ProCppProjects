@@ -127,6 +127,7 @@
     <ClCompile Include="MyLine.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MyRectangle.cpp" />
+    <ClCompile Include="PenWeight.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -140,6 +141,7 @@
     <ClInclude Include="MyLine.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MyRectangle.h" />
+    <ClInclude Include="PenWeight.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="singleton.h" />

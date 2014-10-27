@@ -209,12 +209,10 @@ LRESULT CMainFrame::OnShapeChange(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 
 LRESULT CMainFrame::OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
-	if (m_view.undoLists.size() != 0) {
-		
+	if (m_view.undoLists.size() != 0) {		
 		m_view.redoLists.push_back(m_view.undoLists.back());
 		m_view.undoLists.pop_back();
 		m_view.m_GraphicsImage.Clear(Gdiplus::Color(255, 255, 255));
-		
 		for (auto it = m_view.undoLists.begin(); it != m_view.undoLists.end(); it++) {
 			it->get()->draw(m_view.m_GraphicsImage);
 		}
@@ -225,7 +223,6 @@ LRESULT CMainFrame::OnEditUndo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnEditRedo(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
-	
 	if (m_view.redoLists.size() != 0) {
 		m_view.undoLists.push_back(m_view.redoLists.back());
 		m_view.redoLists.back().get()->draw(m_view.m_GraphicsImage);
@@ -240,7 +237,6 @@ LRESULT CMainFrame::OnFileSave(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 	if (!m_view.fileIsSaved) {
 		CFileDialog fileDlg(false, _T("PNG"), _T("image.PNG"),
 			NULL, _T("PNG Format\0*.PNG\0"));
-
 		if (IDOK == fileDlg.DoModal()) {
 			m_view.currentFileName = fileDlg.m_szFileName;
 			CLSID pngClsid;
@@ -253,8 +249,7 @@ LRESULT CMainFrame::OnFileSave(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 		CLSID pngClsid;
 		CLSIDFromString(L"{557cf406-1a04-11d3-9a73-0000f81ef32e}", &pngClsid);
 		m_view.m_BitmapImage.Save(CA2W(m_view.currentFileName.c_str()), &pngClsid);
-	}
-	
+	}	
 	return 0;
 }
 
@@ -262,7 +257,6 @@ LRESULT CMainFrame::OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWnd
 {
 	CFileDialog fileDlg(false, _T("PNG"), _T("image.PNG"),
 		NULL, _T("PNG Format\0*.PNG\0"));
-
 	if (IDOK == fileDlg.DoModal()) {
 		m_view.currentFileName = fileDlg.m_szFileName;
 		CLSID pngClsid;
@@ -270,6 +264,5 @@ LRESULT CMainFrame::OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWnd
 		m_view.m_BitmapImage.Save(CA2W(m_view.currentFileName.c_str()), &pngClsid);
 		m_view.fileIsSaved = true;
 	}
-
 	return 0;
 }

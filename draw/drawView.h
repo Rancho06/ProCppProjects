@@ -8,6 +8,7 @@
 #include "MyLine.h"
 #include "MyEllipse.h"
 #include "MyRectangle.h"
+#include "PenWeight.h"
 
 class CDrawView : public CScrollWindowImpl<CDrawView>
 {

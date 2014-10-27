@@ -58,8 +58,9 @@ LRESULT CDrawView::OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
 LRESULT CDrawView::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {	
 	m_Shape = ShapeMaker::createShape(shapeType);
-	std::shared_ptr<Pen> myPen(m_Pen.Clone());
-	m_Shape.get()->setPen(myPen);
+	Color color;
+	m_Pen.GetColor(&color);
+	m_Shape.get()->setPen(PenWeight::get().GetPen(color, m_Pen.GetWidth()));
 	int xPos = GET_X_LPARAM(lParam);
 	int yPos = GET_Y_LPARAM(lParam);
 	m_Shape.get()->setStartPoint(Point(xPos, yPos));	
