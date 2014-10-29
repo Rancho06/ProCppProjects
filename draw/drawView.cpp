@@ -81,6 +81,7 @@ LRESULT CDrawView::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 		m_Shape.get()->draw(m_GraphicsImage);
 		RedrawWindow();
 		undoLists.push_back(m_Shape);
+		redoLists.clear();
 		m_Shape.reset();
 	}	
 	return 0;
