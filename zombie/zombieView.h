@@ -13,6 +13,8 @@ public:
 
 	BEGIN_MSG_MAP(CZombieView)
 		MESSAGE_HANDLER(WM_PAINT, OnPaint)
+		// add one message to bind mouse
+		MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
 	END_MSG_MAP()
 
 // Handler prototypes (uncomment arguments if needed):
@@ -21,10 +23,12 @@ public:
 //	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
 
 	LRESULT OnPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 
 	CZombieView();
 	void DrawGrid();
 
 	Gdiplus::Bitmap m_BitmapImage;
 	Gdiplus::Graphics m_GraphicsImage;
+
 };

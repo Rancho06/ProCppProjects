@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-
+#include "World.h"
 #include "aboutdlg.h"
 #include "zombieView.h"
 #include "MainFrm.h"
@@ -22,6 +22,33 @@ BOOL CMainFrame::OnIdle()
 	return FALSE;
 }
 
+void createZombies(int count) {
+	for (int i = 0; i < count; ++i) {
+		MachineState* newZombie = new MachineState();
+		do {
+			newZombie->m_XPos = World::get().getRandom() % 20;
+			newZombie->m_YPos = World::get().getRandom() % 20;
+		} while (World::get().array[newZombie->m_XPos][newZombie->m_YPos] != 0);
+		World::get().array[newZombie->m_XPos][newZombie->m_YPos] = 1;
+		World::get().zombieStateLists.push_back(*newZombie);
+		World::get().zombieMachine.BindState(World::get().zombieStateLists.back());
+	}	
+}
+
+void createHumans(int count) {
+	for (int i = 0; i < count; ++i) {
+		MachineState* newHuman = new MachineState();
+		do {
+			newHuman->m_XPos = World::get().getRandom() % 20;
+			newHuman->m_YPos = World::get().getRandom() % 20;
+		} while (World::get().array[newHuman->m_XPos][newHuman->m_YPos] != 0);
+		World::get().array[newHuman->m_XPos][newHuman->m_YPos] = 1;
+		World::get().humanStateLists.push_back(*newHuman);
+		World::get().humanMachine.BindState(World::get().humanStateLists.back());
+	}	
+}
+
+
 LRESULT CMainFrame::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
 
@@ -37,8 +64,8 @@ LRESULT CMainFrame::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/
 	pLoop->AddIdleHandler(this);
 
 	// TEMP CODE: Initialize zombie test machine
-	zombieMachine.LoadMachine(std::string(""));
-	zombieMachine.BindState(zombieTestState);
+	
+	
 	// END TEMP CODE
 	return 0;
 }
@@ -89,17 +116,44 @@ LRESULT CMainFrame::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 	// Check if this is the turn timer
 	if (wParam == 1)
 	{
-		// TEMP CODE: Take turn for zombie machine
-		zombieMachine.TakeTurn(zombieTestState);
-		// END TEMP CODE
+		for (auto it = World::get().zombieStateLists.begin(); it != World::get().zombieStateLists.end(); ++it) {
+			World::get().zombieMachine.TakeTurn(*it);
+		}
+		for (auto it = World::get().humanStateLists.begin(); it != World::get().humanStateLists.end(); ++it) {
+			World::get().humanMachine.TakeTurn(*it);
+		}
+		m_view.RedrawWindow();
 	}
-
 	return 0;
 }
 
 LRESULT CMainFrame::OnSimStart(WORD , WORD , HWND , BOOL& )
 {
 	// Add timer to run once per second
-	SetTimer(1, 1000);
+	SetTimer(1, 1500);
+	return 0;
+}
+
+LRESULT CMainFrame::OnLoadZombie(WORD, WORD, HWND, BOOL&)
+{
+	World::get().zombieMachine.LoadMachine(std::string("search.zom"));
+	createZombies(1);
+	return 0;
+}
+
+LRESULT CMainFrame::OnLoadSurvivor(WORD, WORD, HWND, BOOL&)
+{
+	World::get().humanMachine.LoadMachine(std::string("the_governor.zom"));
+	createHumans(10);
+	return 0;
+}
+
+LRESULT CMainFrame::OnClear(WORD, WORD, HWND, BOOL&)
+{
+	return 0;
+}
+
+LRESULT CMainFrame::OnRandomize(WORD, WORD, HWND, BOOL&)
+{
 	return 0;
 }

@@ -16,7 +16,7 @@ public:
 	void DebugOutput(MachineState& state);
 
 	virtual void Execute(MachineState& state) = 0;
-protected:
+//protected:
 	int m_Param;
 	const char* m_OpName;
 };
@@ -39,6 +39,159 @@ struct OpGoto : Op
 {
 	OpGoto(int parameter)
 		: Op("OpGoto", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpAttack : Op
+{
+	OpAttack()
+	: Op("OpAttack", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpRangedAttack : Op
+{
+	OpRangedAttack()
+	: Op("OpRangedAttack", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpForward : Op
+{
+	OpForward()
+	: Op("OpForward", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpEndturn : Op
+{
+	OpEndturn()
+	: Op("OpGoto", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpTestHuman : Op
+{
+	OpTestHuman(int parameter)
+	: Op("OpTestHuman", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpTestZombie : Op
+{
+	OpTestZombie(int parameter)
+	: Op("OpTestZombie", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpTestWall : Op
+{
+	OpTestWall()
+	: Op("OpTestWall", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpTestRandom : Op
+{
+	OpTestRandom()
+	: Op("OpTestRandom", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpTestPassable : Op
+{
+	OpTestPassable()
+	: Op("OpTestPassable", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpJe : Op
+{
+	OpJe(int parameter)
+	: Op("OpJe", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpJne : Op
+{
+	OpJne(int parameter)
+	: Op("OpJne", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpTestMem : Op
+{
+	OpTestMem(int parameter)
+	: Op("OpTestMem", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpMem : Op
+{
+	OpMem(int parameter)
+	: Op("OpMem", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpSet : Op
+{
+	OpSet(int parameter)
+	: Op("OpSet", parameter)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpInc : Op
+{
+	OpInc()
+	: Op("OpInc", NULL)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpDec : Op
+{
+	OpDec()
+	: Op("OpDec", 0)
+	{ }
+
+	virtual void Execute(MachineState& state);
+};
+
+struct OpSaveLoc : Op
+{
+	OpSaveLoc()
+	: Op("OpSaveLoc", 0)
 	{ }
 
 	virtual void Execute(MachineState& state);

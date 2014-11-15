@@ -127,6 +127,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="World.cpp" />
     <ClCompile Include="zombie.cpp" />
     <ClCompile Include="zombieView.cpp" />
   </ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="singleton.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="traits.h" />
+    <ClInclude Include="World.h" />
     <ClInclude Include="zombieView.h" />
   </ItemGroup>
   <ItemGroup>

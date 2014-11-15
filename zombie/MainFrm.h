@@ -32,6 +32,12 @@ public:
 		COMMAND_ID_HANDLER(ID_VIEW_STATUS_BAR, OnViewStatusBar)
 		COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAppAbout)
 		COMMAND_ID_HANDLER(ID_SIMULATION_START, OnSimStart)
+		// add commands handler
+		COMMAND_ID_HANDLER(ID_SIMULATION_LOADZOMBIE, OnLoadZombie)
+		COMMAND_ID_HANDLER(ID_SIMULATION_LOADSURVIVOR, OnLoadSurvivor)
+		COMMAND_ID_HANDLER(ID_SIMULATION_RANDOMIZE, OnRandomize)
+		COMMAND_ID_HANDLER(ID_SIMULATION_CLEAR, OnClear)
+
 		CHAIN_MSG_MAP(CUpdateUI<CMainFrame>)
 		CHAIN_MSG_MAP(CFrameWindowImpl<CMainFrame>)
 	END_MSG_MAP()
@@ -49,9 +55,13 @@ public:
 	LRESULT OnViewStatusBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnAppAbout(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnSimStart(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnLoadZombie(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnLoadSurvivor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnClear(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnRandomize(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 
 	// TEMP CODE TEST MACHINE
-	MachineState zombieTestState;
-	Machine<ZombieTraits> zombieMachine;
+	//MachineState zombieTestState;
+	//Machine<ZombieTraits> zombieMachine;
 	// END TEMP CODE
 };
