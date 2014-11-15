@@ -25,6 +25,24 @@ BOOL CMainFrame::OnIdle()
 void createZombies(int count) {
 	for (int i = 0; i < count; ++i) {
 		MachineState* newZombie = new MachineState();
+		int facing = World::get().getRandom() % 4;
+		switch (facing) {
+		case 0:
+			newZombie->m_Facing = MachineState::UP;
+			break;
+		case 1:
+			newZombie->m_Facing = MachineState::DOWN;
+			break;
+		case 2:
+			newZombie->m_Facing = MachineState::LEFT;
+			break;
+		case 3:
+			newZombie->m_Facing = MachineState::RIGHT;
+			break;
+		default:
+			newZombie->m_Facing = MachineState::UP;
+			break;
+		}
 		do {
 			newZombie->m_XPos = World::get().getRandom() % 20;
 			newZombie->m_YPos = World::get().getRandom() % 20;
@@ -130,21 +148,38 @@ LRESULT CMainFrame::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 LRESULT CMainFrame::OnSimStart(WORD , WORD , HWND , BOOL& )
 {
 	// Add timer to run once per second
-	SetTimer(1, 1500);
+	if (World::get().isRunning) {
+		KillTimer(1);
+		World::get().isRunning = false;
+	}
+	else {
+		SetTimer(1, 1000);
+		World::get().isRunning = true;
+	}	
 	return 0;
 }
 
 LRESULT CMainFrame::OnLoadZombie(WORD, WORD, HWND, BOOL&)
 {
-	World::get().zombieMachine.LoadMachine(std::string("search.zom"));
-	createZombies(1);
+	CFileDialog fileDlg(true, _T("zom"), NULL,
+		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("Zombie Program\0*.zom\0"));
+	if (IDOK == fileDlg.DoModal()) {
+		World::get().zombieFileName = fileDlg.m_szFileName;	
+		World::get().zombieMachine.LoadMachine(World::get().zombieFileName);
+		
+	}
 	return 0;
 }
 
 LRESULT CMainFrame::OnLoadSurvivor(WORD, WORD, HWND, BOOL&)
 {
-	World::get().humanMachine.LoadMachine(std::string("the_governor.zom"));
-	createHumans(10);
+	CFileDialog fileDlg(true, _T("zom"), NULL,
+		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("Zombie Program\0*.zom\0"));
+	if (IDOK == fileDlg.DoModal()) {
+		World::get().humanFileName = fileDlg.m_szFileName;
+		World::get().humanMachine.LoadMachine(World::get().humanFileName);
+		
+	}	
 	return 0;
 }
 
@@ -155,5 +190,8 @@ LRESULT CMainFrame::OnClear(WORD, WORD, HWND, BOOL&)
 
 LRESULT CMainFrame::OnRandomize(WORD, WORD, HWND, BOOL&)
 {
+	createZombies(20);
+	createHumans(10);
+	m_view.RedrawWindow();
 	return 0;
 }

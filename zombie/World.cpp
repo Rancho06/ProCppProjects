@@ -2,9 +2,11 @@
 #include "World.h"
 
 
+
 World::World()
 {
 	array = new int*[SIZE]();
+	isRunning = false;
 	for (int i = 0; i < SIZE; ++i) {
 		array[i] = new int[SIZE];
 		for (int j = 0; j < SIZE; ++j) {

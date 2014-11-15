@@ -19,11 +19,8 @@ struct MachineState
 	MachineState()
 		: m_ProgramCounter(1)
 		, m_ActionsTaken(0)
-		, m_Facing(UP)
 		, m_Test(false)
 		, m_Memory(nullptr)
-		, m_XPos(0)
-		, m_YPos(0)
 		, m_currentLoc(0)
 	{ 
 	}
