@@ -8,6 +8,7 @@
 #include "aboutdlg.h"
 #include "zombieView.h"
 #include "MainFrm.h"
+//#include <afxdlgs.h>
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
@@ -108,8 +109,22 @@ LRESULT CMainFrame::OnFileExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
 
 LRESULT CMainFrame::OnFileNew(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
-	// TODO: add code to initialize document
-
+	KillTimer(1);
+	World::get().isRunning = false;
+	for (int i = 0; i < World::get().SIZE; ++i) {
+		for (int j = 0; j < World::get().SIZE; ++j) {
+			World::get().array[i][j] = 0;
+		}
+	}
+	World::get().zombieFileName = "";
+	World::get().humanFileName = "";
+	World::get().zombieMachine.reset();
+	World::get().humanMachine.reset();
+	World::get().zombieStateLists.clear();
+	World::get().humanStateLists.clear();
+	World::get().resetTurnCount();
+	EnableMenuItem(GetMenu(), ID_SIMULATION_RANDOMIZE, MF_DISABLED | MF_GRAYED);
+	m_view.RedrawWindow();
 	return 0;
 }
 
@@ -134,12 +149,25 @@ LRESULT CMainFrame::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 	// Check if this is the turn timer
 	if (wParam == 1)
 	{
+		if ((World::get().zombieStateLists.size() == 0) || (World::get().humanStateLists.size() == 0)) {
+			KillTimer(1);
+			World::get().isRunning = false;
+			if (World::get().zombieStateLists.size() == 0) {
+				MessageBox("Game Over: Humans Won!", "Result", MB_OK);
+			}
+			else {
+				MessageBox("Game Over: Zombies won!", "Result", MB_OK);
+			}
+			
+			return 0;
+		}
 		for (auto it = World::get().zombieStateLists.begin(); it != World::get().zombieStateLists.end(); ++it) {
 			World::get().zombieMachine.TakeTurn(*it);
 		}
 		for (auto it = World::get().humanStateLists.begin(); it != World::get().humanStateLists.end(); ++it) {
 			World::get().humanMachine.TakeTurn(*it);
 		}
+		World::get().incrementTurn();
 		m_view.RedrawWindow();
 	}
 	return 0;
@@ -148,14 +176,16 @@ LRESULT CMainFrame::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 LRESULT CMainFrame::OnSimStart(WORD , WORD , HWND , BOOL& )
 {
 	// Add timer to run once per second
-	if (World::get().isRunning) {
-		KillTimer(1);
-		World::get().isRunning = false;
+	if ((World::get().zombieStateLists.size() != 0) && (World::get().humanStateLists.size() != 0)) {
+		if (World::get().isRunning) {
+			KillTimer(1);
+			World::get().isRunning = false;
+		}
+		else {
+			SetTimer(1, 400);
+			World::get().isRunning = true;
+		}
 	}
-	else {
-		SetTimer(1, 1000);
-		World::get().isRunning = true;
-	}	
 	return 0;
 }
 
@@ -164,32 +194,55 @@ LRESULT CMainFrame::OnLoadZombie(WORD, WORD, HWND, BOOL&)
 	CFileDialog fileDlg(true, _T("zom"), NULL,
 		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("Zombie Program\0*.zom\0"));
 	if (IDOK == fileDlg.DoModal()) {
-		World::get().zombieFileName = fileDlg.m_szFileName;	
+		World::get().zombieFileName = fileDlg.m_szFileName;
+		std::cout << World::get().zombieFileName;
 		World::get().zombieMachine.LoadMachine(World::get().zombieFileName);
-		
+		int pos = World::get().zombieFileName.rfind("\\");
+		World::get().zombieFileName = World::get().zombieFileName.substr(pos + 1);
 	}
+	if ((World::get().zombieFileName != "") && (World::get().humanFileName != "")) {
+		EnableMenuItem(GetMenu(), ID_SIMULATION_RANDOMIZE, MF_ENABLED);
+	}
+	m_view.RedrawWindow();
 	return 0;
 }
 
 LRESULT CMainFrame::OnLoadSurvivor(WORD, WORD, HWND, BOOL&)
 {
 	CFileDialog fileDlg(true, _T("zom"), NULL,
-		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("Zombie Program\0*.zom\0"));
+		OFN_HIDEREADONLY | OFN_FILEMUSTEXIST, _T("Human Program\0*.zom\0"));
 	if (IDOK == fileDlg.DoModal()) {
 		World::get().humanFileName = fileDlg.m_szFileName;
 		World::get().humanMachine.LoadMachine(World::get().humanFileName);
-		
-	}	
+		int pos = World::get().humanFileName.rfind("\\");
+		World::get().humanFileName = World::get().humanFileName.substr(pos + 1);
+	}
+	if ((World::get().zombieFileName != "") && (World::get().humanFileName != "")) {
+		EnableMenuItem(GetMenu(), ID_SIMULATION_RANDOMIZE, MF_ENABLED);
+	}
+	m_view.RedrawWindow();
 	return 0;
 }
 
 LRESULT CMainFrame::OnClear(WORD, WORD, HWND, BOOL&)
 {
+	KillTimer(1);
+	World::get().isRunning = false;
+	for (int i = 0; i < World::get().SIZE; ++i) {
+		for (int j = 0; j < World::get().SIZE; ++j) {
+			World::get().array[i][j] = 0;
+		}
+	}
+	World::get().resetTurnCount();
+	World::get().zombieStateLists.clear();
+	World::get().humanStateLists.clear();	
+	m_view.RedrawWindow();
 	return 0;
 }
 
 LRESULT CMainFrame::OnRandomize(WORD, WORD, HWND, BOOL&)
 {
+	
 	createZombies(20);
 	createHumans(10);
 	m_view.RedrawWindow();

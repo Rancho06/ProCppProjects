@@ -11,6 +11,9 @@ class World :
 public:
 	World();
 	int getRandom();
+	void incrementTurn();
+	void resetTurnCount();
+	int getTurnCount();
 	~World();
 
 	const int SIZE = 20;
@@ -22,5 +25,7 @@ public:
 	bool isRunning;
 	std::string zombieFileName;
 	std::string humanFileName;
+private:
+	int turnCount;
 };
 

@@ -63,7 +63,7 @@ BEGIN
     POPUP "&Simulation"
     BEGIN
         MENUITEM "&Start/Stop",                 ID_SIMULATION_START
-        MENUITEM "&Randomize",                  ID_SIMULATION_RANDOMIZE
+        MENUITEM "&Randomize",                  ID_SIMULATION_RANDOMIZE, INACTIVE
         MENUITEM "&Clear",                      ID_SIMULATION_CLEAR
         MENUITEM SEPARATOR
         MENUITEM "Load &Zombie...",             ID_SIMULATION_LOADZOMBIE

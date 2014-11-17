@@ -74,22 +74,22 @@ public:
 
 	// Take a turn using this logic for the passed in state
 	void TakeTurn(MachineState& state);
+
+	// reset Machine
+	void reset();
 private:
 	std::vector<Op*> m_Ops;
 };
 
 template <typename MachineTraits>
+void Machine<MachineTraits>::reset() {
+	m_Ops.clear();
+}
+
+template <typename MachineTraits>
 void Machine<MachineTraits>::LoadMachine(std::string& filename)
 {
-	// TEMP CODE: Add your parsing code here!
 	m_Ops.clear();
-	/*
-	m_Ops.push_back(new OpRotate(0));
-	m_Ops.push_back(new OpRotate(0));
-	m_Ops.push_back(new OpRotate(1));
-	m_Ops.push_back(new OpGoto(1));
-	*/
-	
 	std::ifstream inputHandler(filename);
 	if (inputHandler.is_open()) {
 		while (!inputHandler.eof()) {
@@ -175,10 +175,6 @@ void Machine<MachineTraits>::LoadMachine(std::string& filename)
 	else {
 		std::cout << "File Not Found" << std::endl;
 	}
-	for (unsigned int i = 0; i < m_Ops.size(); ++i) {
-		std::cout << m_Ops[i]->m_OpName << " " << m_Ops[i]->m_Param << std::endl;
-	}
-	// END TEMP CODE
 }
 
 template <typename MachineTraits>
@@ -193,10 +189,7 @@ void Machine<MachineTraits>::BindState(MachineState& state)
 	else {
 		state.m_label = 2;
 	}
-
-	// Not sure if this is right
 	state.m_ProgramCounter = 1;
-
 	delete state.m_Memory;
 	state.m_Memory = new int[state.m_MaxMemory];
 	for (int i = 0; i < state.m_MaxMemory; i++)
@@ -208,7 +201,6 @@ void Machine<MachineTraits>::BindState(MachineState& state)
 template <typename MachineTraits>
 void Machine<MachineTraits>::TakeTurn(MachineState& state)
 {
-	//std::cout << "TAKING TURN" << std::endl;
 	state.m_ActionsTaken = 0;
 	while (state.m_ActionsTaken < MachineTraits::ACTIONS_PER_TURN)
 	{
