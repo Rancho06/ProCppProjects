@@ -46,14 +46,7 @@ LRESULT CZombieView::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam
 	return 0;
 }
 
-void CZombieView::DrawGrid()
-{
-	m_GraphicsImage.Clear(Color(255, 255, 255));
-	Pen pen(Color(0, 0, 0));
-	SolidBrush brush(Color(0, 0, 0));
-	//m_GraphicsImage.DrawRectangle(&pen, 10, 10, 600, 600);
-
-	Font font(L"Times New Roman", 12);
+void loadMessage() {
 	if ((x >= 0) && (x <= 19) && (y >= 0) && (y <= 19) && (World::get().array[x][y] == 2)) {
 		messages[0] = "Human at (" + std::to_string(x) + "," + std::to_string(y) + ")";
 		messages[1] = "Memory:";
@@ -65,6 +58,16 @@ void CZombieView::DrawGrid()
 			}
 		}
 	}
+}
+
+void CZombieView::DrawGrid()
+{
+	m_GraphicsImage.Clear(Color(255, 255, 255));
+	Pen pen(Color(0, 0, 0));
+	SolidBrush brush(Color(0, 0, 0));
+
+	loadMessage();
+	Font font(L"Times New Roman", 12);
 	m_GraphicsImage.DrawString(CA2W(messages[0].c_str()), -1, &font, PointF(620, 270), &brush);
 	m_GraphicsImage.DrawString(CA2W(messages[1].c_str()), -1, &font, PointF(620, 290), &brush);
 	m_GraphicsImage.DrawString(CA2W(messages[2].c_str()), -1, &font, PointF(620, 310), &brush);
@@ -76,10 +79,13 @@ void CZombieView::DrawGrid()
 			m_GraphicsImage.DrawRectangle(&pen, 10 + 30 * i, 10 + 30 * j, 30, 30);
 		}
 	}
+
 	brush.SetColor(Color(255, 0, 0));
 	m_GraphicsImage.DrawString(CA2W("Zombies"), -1, &font, PointF(620, 10), &brush);
 	m_GraphicsImage.DrawString(CA2W((std::string("Program: ") + World::get().zombieFileName).c_str()), -1, &font, PointF(620, 30), &brush);
 	m_GraphicsImage.DrawString(CA2W((std::string("Alive: ") + std::to_string(World::get().zombieStateLists.size())).c_str()), -1, &font, PointF(620, 50), &brush);
+
+
 	for (auto it = World::get().zombieStateLists.begin(); it != World::get().zombieStateLists.end(); ++it) {
 		
 		Point points[3];

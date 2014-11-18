@@ -51,6 +51,9 @@ struct MachineState
 	{
 		m_Memory[location] = value;
 	}
+	bool operator ==(const MachineState& state) {
+		return ((m_XPos == state.m_XPos) && (m_YPos == state.m_YPos));
+	}
 private:
 	// Data which is set by the traits
 	int m_ActionsPerTurn;
@@ -77,6 +80,11 @@ public:
 
 	// reset Machine
 	void reset();
+
+	// get the size of operations
+	int getOpSize();
+
+
 private:
 	std::vector<Op*> m_Ops;
 };
@@ -84,6 +92,12 @@ private:
 template <typename MachineTraits>
 void Machine<MachineTraits>::reset() {
 	m_Ops.clear();
+}
+
+
+template <typename MachineTraits>
+int Machine<MachineTraits>::getOpSize() {
+	return m_Ops.size();
 }
 
 template <typename MachineTraits>
@@ -169,11 +183,13 @@ void Machine<MachineTraits>::LoadMachine(std::string& filename)
 			else if (firstOpString == "test_mem") {
 				m_Ops.push_back(new OpTestMem(atoi(secondOpString.c_str())));
 			}
-
+			else {
+				throw InvalidOp();
+			}
 		}
 	}
 	else {
-		std::cout << "File Not Found" << std::endl;
+		throw InvalidFileException();
 	}
 }
 

@@ -5,13 +5,13 @@
 #include "World.h"
 
 // Output state information for debugging purposes
-void Op::DebugOutput(MachineState& state)
+/*void Op::DebugOutput(MachineState& state)
 {
 	std::cout << state.m_ProgramCounter << ":" << m_OpName << "," << m_Param << std::endl;
 	std::cout << "\t Test Guy is at Location (" << state.m_XPos << "," << state.m_YPos << ")" << std::endl;
-}
+}*/
 
-void OpRotate::Execute(MachineState& state)
+void OpRotate::Execute(MachineState& state) throw()
 {
 	//DebugOutput(state);
 	switch (state.m_Facing)
@@ -65,8 +65,26 @@ void OpRotate::Execute(MachineState& state)
 
 void OpGoto::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	switch (state.m_label) {
+	case 1:
+		if (m_Param > World::get().zombieMachine.getOpSize()) {
+			World::get().array[state.m_XPos][state.m_YPos] = 0;
+			World::get().zombieStateLists.remove(state);
+			throw InvalidLineException();
+		}
+		break;
+	case 2:
+		if (m_Param > World::get().humanMachine.getOpSize()) {
+			World::get().array[state.m_XPos][state.m_YPos] = 0;
+			World::get().humanStateLists.remove(state);
+			throw InvalidLineException();
+		}
+		break;
+	default:
+		break;
+	}
 	state.m_ProgramCounter = m_Param;
+	
 }
 
 void humanAttack(int x, int y) {
@@ -105,9 +123,8 @@ void zombieAttack(int x, int y) {
 	}
 }
 
-void OpAttack::Execute(MachineState& state)
+void OpAttack::Execute(MachineState& state) throw()
 {
-	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -154,8 +171,10 @@ void OpAttack::Execute(MachineState& state)
 
 void OpRangedAttack::Execute(MachineState& state)
 {
-	//DebugOutput(state);
-	if ((state.m_label == 2)) {
+	if (state.m_label == 1) {
+		throw ZombieRangedAttackException();
+	}
+	if (state.m_label == 2) {
 		switch (state.m_Facing)
 		{
 		case (MachineState::UP) :
@@ -177,9 +196,8 @@ void OpRangedAttack::Execute(MachineState& state)
 	++state.m_ActionsTaken;
 }
 
-void OpForward::Execute(MachineState& state)
+void OpForward::Execute(MachineState& state) throw()
 {
-	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -216,16 +234,17 @@ void OpForward::Execute(MachineState& state)
 	++state.m_ActionsTaken;
 }
 
-void OpEndturn::Execute(MachineState& state)
+void OpEndturn::Execute(MachineState& state) throw()
 {
-	//DebugOutput(state);
 	++state.m_ProgramCounter;
 	state.m_ActionsTaken = state.GetActionsPerTurn();
 }
 
 void OpTestHuman::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if ((m_Param != 1) && (m_Param != 2)) {
+		throw TestDistanceException();
+	}
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -233,7 +252,6 @@ void OpTestHuman::Execute(MachineState& state)
 		break;
 	case (MachineState::RIGHT) :
 		state.m_Test = ((state.m_XPos < 20 - m_Param) && (World::get().array[state.m_XPos + m_Param][state.m_YPos] == 2));
-
 		break;
 	case (MachineState::DOWN) :
 		state.m_Test = ((state.m_YPos < 20 - m_Param) && (World::get().array[state.m_XPos][state.m_YPos + m_Param] == 2));
@@ -248,7 +266,9 @@ void OpTestHuman::Execute(MachineState& state)
 
 void OpTestZombie::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if ((m_Param != 1) && (m_Param != 2)) {
+		throw TestDistanceException();
+	}
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -256,7 +276,6 @@ void OpTestZombie::Execute(MachineState& state)
 		break;
 	case (MachineState::RIGHT) :
 		state.m_Test = ((state.m_XPos < 20 - m_Param) && (World::get().array[state.m_XPos + m_Param][state.m_YPos] == 1));
-
 		break;
 	case (MachineState::DOWN) :
 		state.m_Test = ((state.m_YPos < 20 - m_Param) && (World::get().array[state.m_XPos][state.m_YPos + m_Param] == 1));
@@ -269,9 +288,8 @@ void OpTestZombie::Execute(MachineState& state)
 	++state.m_ProgramCounter;
 }
 
-void OpTestWall::Execute(MachineState& state)
+void OpTestWall::Execute(MachineState& state) throw()
 {
-	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -291,9 +309,8 @@ void OpTestWall::Execute(MachineState& state)
 	++state.m_ProgramCounter;
 }
 
-void OpTestPassable::Execute(MachineState& state)
+void OpTestPassable::Execute(MachineState& state) throw()
 {
-	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -313,9 +330,8 @@ void OpTestPassable::Execute(MachineState& state)
 	++state.m_ProgramCounter;
 }
 
-void OpTestRandom::Execute(MachineState& state)
+void OpTestRandom::Execute(MachineState& state) throw()
 {
-	//DebugOutput(state);
 	if (World::get().getRandom() % 2 == 0) {
 		state.m_Test = false;
 	}
@@ -327,7 +343,20 @@ void OpTestRandom::Execute(MachineState& state)
 
 void OpJe::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	switch (state.m_label) {
+	case 1:
+		if (m_Param > World::get().zombieMachine.getOpSize()) {
+			throw InvalidLineException();
+		}
+		break;
+	case 2:
+		if (m_Param > World::get().humanMachine.getOpSize()) {
+			throw InvalidLineException();
+		}
+		break;
+	default:
+		break;
+	}
 	if (state.m_Test) {
 		state.m_ProgramCounter = m_Param;
 	}
@@ -339,7 +368,20 @@ void OpJe::Execute(MachineState& state)
 
 void OpJne::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	switch (state.m_label) {
+	case 1:
+		if (m_Param > World::get().zombieMachine.getOpSize()) {
+			throw InvalidLineException();
+		}
+		break;
+	case 2:
+		if (m_Param > World::get().humanMachine.getOpSize()) {
+			throw InvalidLineException();
+		}
+		break;
+	default:
+		break;
+	}
 	if (!state.m_Test) {
 		state.m_ProgramCounter = m_Param;
 	}
@@ -350,7 +392,12 @@ void OpJne::Execute(MachineState& state)
 
 void OpMem::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if (state.m_label == 1) {
+		throw ZombieMemoryException();
+	}
+	if ((m_Param != 0) && (m_Param != 1)) {
+		throw SlotOutOfBoundsException();
+	}
 	if (m_Param < state.GetMaxMemory()) {
 		state.m_currentLoc = m_Param;
 	}
@@ -359,35 +406,57 @@ void OpMem::Execute(MachineState& state)
 
 void OpSet::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if (state.m_label == 1) {
+		throw ZombieMemoryException();
+	}
+	if ((state.m_currentLoc != 0) && (state.m_currentLoc != 1)) {
+		throw SlotOutOfBoundsException();
+	}
 	state.SetMemory(state.m_currentLoc, m_Param);
 	++state.m_ProgramCounter;
 }
 
 void OpInc::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if (state.m_label == 1) {
+		throw ZombieMemoryException();
+	}
+	if ((state.m_currentLoc != 0) && (state.m_currentLoc != 1)) {
+		throw SlotOutOfBoundsException();
+	}
 	state.SetMemory(state.m_currentLoc, state.GetMemory(state.m_currentLoc) + 1);
 	++state.m_ProgramCounter;
 }
 
 void OpDec::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if (state.m_label == 1) {
+		throw ZombieMemoryException();
+	}
+	if ((state.m_currentLoc != 0) && (state.m_currentLoc != 1)) {
+		throw SlotOutOfBoundsException();
+	}
 	state.SetMemory(state.m_currentLoc, state.GetMemory(state.m_currentLoc) - 1);
 	++state.m_ProgramCounter;
 }
 
 void OpTestMem::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if (state.m_label == 1) {
+		throw ZombieMemoryException();
+	}
+	if ((state.m_currentLoc != 0) && (state.m_currentLoc != 1)) {
+		throw SlotOutOfBoundsException();
+	}
 	state.m_Test = (state.GetMemory(state.m_currentLoc) == m_Param);
 	++state.m_ProgramCounter;
 }
 
 void OpSaveLoc::Execute(MachineState& state)
 {
-	//DebugOutput(state);
+	if (state.m_label == 1) {
+		throw ZombieMemoryException();
+	}
 	state.SetMemory(0, state.m_XPos);
 	state.SetMemory(1, state.m_YPos);
 	++state.m_ProgramCounter;

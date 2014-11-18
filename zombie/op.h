@@ -30,7 +30,7 @@ struct OpRotate : Op
 		: Op("OpRotate", parameter)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 // Defines the goto operation
@@ -50,7 +50,7 @@ struct OpAttack : Op
 	: Op("OpAttack", NULL)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 struct OpRangedAttack : Op
@@ -68,7 +68,7 @@ struct OpForward : Op
 	: Op("OpForward", NULL)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 struct OpEndturn : Op
@@ -77,7 +77,7 @@ struct OpEndturn : Op
 	: Op("OpGoto", NULL)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 struct OpTestHuman : Op
@@ -104,7 +104,7 @@ struct OpTestWall : Op
 	: Op("OpTestWall", NULL)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 struct OpTestRandom : Op
@@ -113,7 +113,7 @@ struct OpTestRandom : Op
 	: Op("OpTestRandom", NULL)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 struct OpTestPassable : Op
@@ -122,7 +122,7 @@ struct OpTestPassable : Op
 	: Op("OpTestPassable", NULL)
 	{ }
 
-	virtual void Execute(MachineState& state);
+	virtual void Execute(MachineState& state) throw();
 };
 
 struct OpJe : Op

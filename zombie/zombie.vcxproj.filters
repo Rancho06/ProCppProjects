@@ -108,5 +108,8 @@
     <None Include="the_governor.zom">
       <Filter>ZOM Files</Filter>
     </None>
+    <None Include="avoid_wall.zom">
+      <Filter>ZOM Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
