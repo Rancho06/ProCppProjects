@@ -1,4 +1,5 @@
 #pragma once
+
 #include "singleton.h"
 #include "machine.h"
 #include "traits.h"
@@ -25,6 +26,7 @@ public:
 	bool isRunning;
 	std::string zombieFileName;
 	std::string humanFileName;
+
 private:
 	int turnCount;
 };

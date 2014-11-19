@@ -111,5 +111,8 @@
     <None Include="avoid_wall.zom">
       <Filter>ZOM Files</Filter>
     </None>
+    <None Include="human_memory.zom">
+      <Filter>ZOM Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

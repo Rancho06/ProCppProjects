@@ -5,11 +5,10 @@
 #include "World.h"
 
 // Output state information for debugging purposes
-/*void Op::DebugOutput(MachineState& state)
+void Op::DebugOutput(MachineState& state)
 {
 	std::cout << state.m_ProgramCounter << ":" << m_OpName << "," << m_Param << std::endl;
-	std::cout << "\t Test Guy is at Location (" << state.m_XPos << "," << state.m_YPos << ")" << std::endl;
-}*/
+}
 
 void OpRotate::Execute(MachineState& state) throw()
 {
@@ -65,6 +64,7 @@ void OpRotate::Execute(MachineState& state) throw()
 
 void OpGoto::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	switch (state.m_label) {
 	case 1:
 		if (m_Param > World::get().zombieMachine.getOpSize()) {
@@ -125,6 +125,7 @@ void zombieAttack(int x, int y) {
 
 void OpAttack::Execute(MachineState& state) throw()
 {
+	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -166,11 +167,9 @@ void OpAttack::Execute(MachineState& state) throw()
 	++state.m_ActionsTaken;
 }
 
-
-
-
 void OpRangedAttack::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieRangedAttackException();
 	}
@@ -198,6 +197,7 @@ void OpRangedAttack::Execute(MachineState& state)
 
 void OpForward::Execute(MachineState& state) throw()
 {
+	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -236,12 +236,14 @@ void OpForward::Execute(MachineState& state) throw()
 
 void OpEndturn::Execute(MachineState& state) throw()
 {
+	//DebugOutput(state);
 	++state.m_ProgramCounter;
 	state.m_ActionsTaken = state.GetActionsPerTurn();
 }
 
 void OpTestHuman::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if ((m_Param != 1) && (m_Param != 2)) {
 		throw TestDistanceException();
 	}
@@ -266,6 +268,7 @@ void OpTestHuman::Execute(MachineState& state)
 
 void OpTestZombie::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if ((m_Param != 1) && (m_Param != 2)) {
 		throw TestDistanceException();
 	}
@@ -290,6 +293,7 @@ void OpTestZombie::Execute(MachineState& state)
 
 void OpTestWall::Execute(MachineState& state) throw()
 {
+	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -311,6 +315,7 @@ void OpTestWall::Execute(MachineState& state) throw()
 
 void OpTestPassable::Execute(MachineState& state) throw()
 {
+	//DebugOutput(state);
 	switch (state.m_Facing)
 	{
 	case (MachineState::UP) :
@@ -332,6 +337,7 @@ void OpTestPassable::Execute(MachineState& state) throw()
 
 void OpTestRandom::Execute(MachineState& state) throw()
 {
+	//DebugOutput(state);
 	if (World::get().getRandom() % 2 == 0) {
 		state.m_Test = false;
 	}
@@ -343,6 +349,7 @@ void OpTestRandom::Execute(MachineState& state) throw()
 
 void OpJe::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	switch (state.m_label) {
 	case 1:
 		if (m_Param > World::get().zombieMachine.getOpSize()) {
@@ -368,6 +375,7 @@ void OpJe::Execute(MachineState& state)
 
 void OpJne::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	switch (state.m_label) {
 	case 1:
 		if (m_Param > World::get().zombieMachine.getOpSize()) {
@@ -392,6 +400,7 @@ void OpJne::Execute(MachineState& state)
 
 void OpMem::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieMemoryException();
 	}
@@ -406,6 +415,7 @@ void OpMem::Execute(MachineState& state)
 
 void OpSet::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieMemoryException();
 	}
@@ -418,6 +428,7 @@ void OpSet::Execute(MachineState& state)
 
 void OpInc::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieMemoryException();
 	}
@@ -430,6 +441,7 @@ void OpInc::Execute(MachineState& state)
 
 void OpDec::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieMemoryException();
 	}
@@ -442,6 +454,7 @@ void OpDec::Execute(MachineState& state)
 
 void OpTestMem::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieMemoryException();
 	}
@@ -454,6 +467,7 @@ void OpTestMem::Execute(MachineState& state)
 
 void OpSaveLoc::Execute(MachineState& state)
 {
+	//DebugOutput(state);
 	if (state.m_label == 1) {
 		throw ZombieMemoryException();
 	}

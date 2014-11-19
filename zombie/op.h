@@ -16,7 +16,7 @@ public:
 	void DebugOutput(MachineState& state);
 
 	virtual void Execute(MachineState& state) = 0;
-//protected:
+protected:
 	int m_Param;
 	const char* m_OpName;
 };

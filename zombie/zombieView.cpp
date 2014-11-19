@@ -42,11 +42,6 @@ LRESULT CZombieView::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam
 
 	x = (GET_X_LPARAM(lParam) - 10) / 30;
 	y = (GET_Y_LPARAM(lParam) - 10) / 30;
-	
-	return 0;
-}
-
-void loadMessage() {
 	if ((x >= 0) && (x <= 19) && (y >= 0) && (y <= 19) && (World::get().array[x][y] == 2)) {
 		messages[0] = "Human at (" + std::to_string(x) + "," + std::to_string(y) + ")";
 		messages[1] = "Memory:";
@@ -58,22 +53,21 @@ void loadMessage() {
 			}
 		}
 	}
+	return 0;
 }
+
 
 void CZombieView::DrawGrid()
 {
 	m_GraphicsImage.Clear(Color(255, 255, 255));
 	Pen pen(Color(0, 0, 0));
 	SolidBrush brush(Color(0, 0, 0));
-
-	loadMessage();
 	Font font(L"Times New Roman", 12);
-	m_GraphicsImage.DrawString(CA2W(messages[0].c_str()), -1, &font, PointF(620, 270), &brush);
-	m_GraphicsImage.DrawString(CA2W(messages[1].c_str()), -1, &font, PointF(620, 290), &brush);
-	m_GraphicsImage.DrawString(CA2W(messages[2].c_str()), -1, &font, PointF(620, 310), &brush);
-	m_GraphicsImage.DrawString(CA2W(messages[3].c_str()), -1, &font, PointF(620, 330), &brush);
 	
+	// draw the month
 	m_GraphicsImage.DrawString(CA2W(("Month: " + std::to_string(World::get().getTurnCount())).c_str()), -1, &font, PointF(620, 210), &brush);
+
+	// draw the squares
 	for (int i = 0; i < 20; ++i) {
 		for (int j = 0; j < 20; ++j) {
 			m_GraphicsImage.DrawRectangle(&pen, 10 + 30 * i, 10 + 30 * j, 30, 30);
@@ -81,11 +75,13 @@ void CZombieView::DrawGrid()
 	}
 
 	brush.SetColor(Color(255, 0, 0));
+
+	// drawString the zombie information
 	m_GraphicsImage.DrawString(CA2W("Zombies"), -1, &font, PointF(620, 10), &brush);
 	m_GraphicsImage.DrawString(CA2W((std::string("Program: ") + World::get().zombieFileName).c_str()), -1, &font, PointF(620, 30), &brush);
 	m_GraphicsImage.DrawString(CA2W((std::string("Alive: ") + std::to_string(World::get().zombieStateLists.size())).c_str()), -1, &font, PointF(620, 50), &brush);
 
-
+	// draw the zombie triangles
 	for (auto it = World::get().zombieStateLists.begin(); it != World::get().zombieStateLists.end(); ++it) {
 		
 		Point points[3];
@@ -117,10 +113,12 @@ void CZombieView::DrawGrid()
 	}
 
 	brush.SetColor(Color(0, 255, 0));
+	// drawString the human information 
 	m_GraphicsImage.DrawString(CA2W("Humans"), -1, &font, PointF(620, 115), &brush);
 	m_GraphicsImage.DrawString(CA2W((std::string("Program: ") + World::get().humanFileName).c_str()), -1, &font, PointF(620, 135), &brush);
 	m_GraphicsImage.DrawString(CA2W((std::string("Alive: ") + std::to_string(World::get().humanStateLists.size())).c_str()), -1, &font, PointF(620, 155), &brush);
-
+	
+	// draw the Human triangles
 	for (auto it = World::get().humanStateLists.begin(); it != World::get().humanStateLists.end(); ++it) {
 		Point points[3];
 		int x = 30 * (*it).m_XPos + 10, y = 30 * (*it).m_YPos + 10;
@@ -150,5 +148,11 @@ void CZombieView::DrawGrid()
 		m_GraphicsImage.FillPolygon(&brush, points, 3);
 	}
 
+	brush.SetColor(Color(0, 0, 0));
 	
+	//draw the Memory Information
+	m_GraphicsImage.DrawString(CA2W(messages[0].c_str()), -1, &font, PointF(620, 270), &brush);
+	m_GraphicsImage.DrawString(CA2W(messages[1].c_str()), -1, &font, PointF(620, 290), &brush);
+	m_GraphicsImage.DrawString(CA2W(messages[2].c_str()), -1, &font, PointF(620, 310), &brush);
+	m_GraphicsImage.DrawString(CA2W(messages[3].c_str()), -1, &font, PointF(620, 330), &brush);
 }

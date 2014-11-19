@@ -2,9 +2,7 @@
 //
 
 #include "stdafx.h"
-
 #include "resource.h"
-
 #include "zombieView.h"
 #include "aboutdlg.h"
 #include "MainFrm.h"

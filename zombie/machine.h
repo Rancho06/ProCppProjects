@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -16,14 +17,15 @@ struct MachineState
 	friend class Machine;
 	
 	enum Facing { UP, RIGHT, DOWN, LEFT};
+	
+	// Constructor
 	MachineState()
 		: m_ProgramCounter(1)
 		, m_ActionsTaken(0)
 		, m_Test(false)
 		, m_Memory(nullptr)
 		, m_currentLoc(0)
-	{ 
-	}
+	{}
 
 	// Active line number in behavior program
 	int m_ProgramCounter;
@@ -33,35 +35,44 @@ struct MachineState
 	Facing m_Facing;
 	// Test flag for branches
 	bool m_Test;
+
 	// add additional location info
 	int m_XPos;
 	int m_YPos;
 	int m_label;
 	int m_currentLoc;
 
+	// public member functions
 	int GetActionsPerTurn() const throw() { return m_ActionsPerTurn; }
 	int GetMaxMemory() const throw() {return m_MaxMemory; }
 	bool GetInfect() const throw() { return m_InfectOnAttack; }
+	
 	int GetMemory(int location)
 	{
-		// FIXME: Throw exception if out of bounds or memory is not allocated
+		if (location >= m_MaxMemory) {
+			throw SlotOutOfBoundsException();
+		}
 		return m_Memory[location];
 	}
+
 	void SetMemory(int location, int value)
 	{
 		m_Memory[location] = value;
 	}
+
 	bool operator ==(const MachineState& state) {
 		return ((m_XPos == state.m_XPos) && (m_YPos == state.m_YPos));
 	}
+
+// Private properties
 private:
 	// Data which is set by the traits
 	int m_ActionsPerTurn;
 	int m_MaxMemory;
 	bool m_InfectOnAttack;
 	int* m_Memory;
-
 };
+
 
 // Describes the machine which processes ops.
 // Different policies dictate behavior possible for machine.
@@ -71,20 +82,14 @@ class Machine
 public:
 	// Load in all the ops for this machine from the specified file
 	void LoadMachine(std::string& filename);
-
 	// Given the state, binds the trait parameters to it
 	void BindState(MachineState& state);
-
 	// Take a turn using this logic for the passed in state
 	void TakeTurn(MachineState& state);
-
 	// reset Machine
 	void reset();
-
 	// get the size of operations
 	int getOpSize();
-
-
 private:
 	std::vector<Op*> m_Ops;
 };
@@ -93,7 +98,6 @@ template <typename MachineTraits>
 void Machine<MachineTraits>::reset() {
 	m_Ops.clear();
 }
-
 
 template <typename MachineTraits>
 int Machine<MachineTraits>::getOpSize() {

@@ -152,6 +152,7 @@
     <None Include="basic_movement.zom" />
     <None Include="daryl_dixon.zom" />
     <None Include="deer.zom" />
+    <None Include="human_memory.zom" />
     <None Include="michonne.zom" />
     <None Include="res\toolbar.bmp" />
     <None Include="res\zombie.ico" />

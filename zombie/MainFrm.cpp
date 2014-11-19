@@ -159,24 +159,48 @@ LRESULT CMainFrame::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 			}			
 			return 0;
 		}
-		
-		for (auto it = World::get().zombieStateLists.begin(); it != World::get().zombieStateLists.end(); ++it) {
+		std::string error = "";
+
+		// Zombies turn first
+		std::list<MachineState> deadZombieList;
+		for (auto& zombie : World::get().zombieStateLists) {
 			try {
-				World::get().zombieMachine.TakeTurn(*it);
+				World::get().zombieMachine.TakeTurn(zombie);
 			}
 			catch (std::exception& e) {
-				MessageBox(e.what(), "Error", MB_OK);
+				error = e.what();
+				World::get().array[zombie.m_XPos][zombie.m_YPos] = 0;
+				deadZombieList.push_back(zombie);
+			}
+		}	
+		for (auto& zombie : deadZombieList) {
+			World::get().zombieStateLists.remove(zombie);
+		}
+
+		// Humans turn next
+		std::list<MachineState> deadHumanList;
+		for (auto& human : World::get().humanStateLists) {
+			try {
+				World::get().humanMachine.TakeTurn(human);
+			}
+			catch (std::exception& e) {
+				error = e.what();
+				World::get().array[human.m_XPos][human.m_YPos] = 0;
+				deadHumanList.push_back(human);
 			}
 		}
-		for (auto it = World::get().humanStateLists.begin(); it != World::get().humanStateLists.end(); ++it) {
-			try {
-				World::get().humanMachine.TakeTurn(*it);
-			}
-			catch (std::exception& e) {
-				MessageBox(e.what(), "Error", MB_OK);
-			}
-		}		
+		for (auto& human : deadHumanList) {
+			World::get().humanStateLists.remove(human);
+		}
+
+		// If there is a error, fire a message box
+		if (error.length() > 0) {
+			MessageBox(error.c_str(), "Error", MB_OK);
+		}
+
+		// increase the month
 		World::get().incrementTurn();
+		// draw the grid
 		m_view.RedrawWindow();
 	}
 	return 0;
@@ -184,7 +208,7 @@ LRESULT CMainFrame::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
 LRESULT CMainFrame::OnSimStart(WORD , WORD , HWND , BOOL& )
 {
-	// Add timer to run once per second
+	// set up the timer to resume or pause
 	if ((World::get().zombieStateLists.size() != 0) && (World::get().humanStateLists.size() != 0)) {
 		if (World::get().isRunning) {
 			KillTimer(1);
@@ -210,6 +234,7 @@ LRESULT CMainFrame::OnLoadZombie(WORD, WORD, HWND, BOOL&)
 		catch (std::exception& e) {
 			MessageBox(e.what(), "Error", MB_OK);
 		}
+		// get the relative path from the absolute path
 		int pos = World::get().zombieFileName.rfind("\\");
 		World::get().zombieFileName = World::get().zombieFileName.substr(pos + 1);
 	}
