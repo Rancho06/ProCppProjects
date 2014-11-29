@@ -20,6 +20,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	if (g_MainBlock != nullptr) {
 		g_MainBlock->CodeGen(myContext);
 	}
+
+	for (auto pair : myContext.m_Gotos) {
+		int key = pair.first;
+		int temp = pair.second;
+		int value = 0;
+		while (myContext.m_Gotos.find(temp) != myContext.m_Gotos.end()) {
+			value = myContext.m_Gotos[temp];
+			temp = value;
+		}
+		if (value != 0) {
+			myContext.m_Ops[key - 1] = "goto," + std::to_string(value);
+		}
+	}
 	std::ofstream of("out.zom");
 	if (of.is_open()) {
 		for (unsigned int i = 0; i < myContext.m_Ops.size(); i++) {

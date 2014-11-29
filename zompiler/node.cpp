@@ -14,6 +14,7 @@ void NBlock::CodeGen(CodeContext& context)
 	}
 	if (m_bMainBlock) {
 		context.m_Ops.push_back("goto,1");
+		context.m_Gotos.insert(std::make_pair(context.m_Ops.size(), 1));
 	}
 }
 
@@ -43,6 +44,7 @@ void NIfElse::CodeGen(CodeContext& context) {
 	m_ifblock->CodeGen(context);
 	context.m_Ops[jeLoc] = "je," + std::to_string(gotoLoc + 2);
 	context.m_Ops[gotoLoc] = "goto," + std::to_string(context.m_Ops.size() + 1);
+	context.m_Gotos.insert(std::make_pair(gotoLoc + 1, context.m_Ops.size() + 1));
 }
 
 NNumeric::NNumeric(std::string& value)
@@ -115,12 +117,6 @@ NMemAssign::NMemAssign(NNumeric* dir1, NNumeric* dir2)
 }
 
 void NMemAssign::CodeGen(CodeContext& context) {
-	/*if (m_loc->m_value == 0) {
-		context.m_Ops.push_back("mem, 0");
-	}
-	else if (m_loc->m_value == 1) {
-		context.m_Ops.push_back("mem, 1");
-	}*/
 	context.m_Ops.push_back("mem," + std::to_string(m_loc->m_value));
 	context.m_Ops.push_back("set," + std::to_string(m_value->m_value));
 }
