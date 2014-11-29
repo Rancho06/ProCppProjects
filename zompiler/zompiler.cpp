@@ -13,14 +13,16 @@ extern NBlock* g_MainBlock;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	// generate AST
 	zompilerparse();
 
-	// TODO: CodeGen from g_MainBlock
+	// generate unoptimized code
 	CodeContext myContext;
 	if (g_MainBlock != nullptr) {
 		g_MainBlock->CodeGen(myContext);
 	}
 
+	// optimize "goto" operation
 	for (auto pair : myContext.m_Gotos) {
 		int key = pair.first;
 		int temp = pair.second;
@@ -33,6 +35,8 @@ int _tmain(int argc, _TCHAR* argv[])
 			myContext.m_Ops[key - 1] = "goto," + std::to_string(value);
 		}
 	}
+
+	// write all the code into a file named "out.zom"
 	std::ofstream of("out.zom");
 	if (of.is_open()) {
 		for (unsigned int i = 0; i < myContext.m_Ops.size(); i++) {
@@ -45,6 +49,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 	of.close();
+
 	_getch();
 	return 0;
 }

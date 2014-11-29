@@ -7,7 +7,9 @@
 
 struct CodeContext
 {
+	// m_Ops stores all the operation codes
 	std::vector<std::string> m_Ops;
+	// m_Gotos stores the two parameters of all the "goto" commands
 	std::map<int, int> m_Gotos;
 };
 
