@@ -1,19 +1,19 @@
-/* A Bison parser, made by GNU Bison 2.7.  */
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
 /* Bison interface for Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989-1990, 2000-2012 Free Software Foundation, Inc.
-   
+
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -26,13 +26,13 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
 #ifndef YY_ZOMPILER_PARSER_HPP_INCLUDED
 # define YY_ZOMPILER_PARSER_HPP_INCLUDED
-/* Enabling traces.  */
+/* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
 #endif
@@ -40,29 +40,44 @@
 extern int zompilerdebug;
 #endif
 
-/* Tokens.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     TINTEGER = 258,
-     TLBRACE = 259,
-     TRBRACE = 260,
-     TSEMI = 261,
-     TLPAREN = 262,
-     TRPAREN = 263,
-     TMAIN = 264,
-     TROTATE = 265
-   };
+  enum yytokentype
+  {
+    TINTEGER = 258,
+    TLBRACE = 259,
+    TRBRACE = 260,
+    TSEMI = 261,
+    TLPAREN = 262,
+    TRPAREN = 263,
+    TLBRACKET = 264,
+    TRBRACKET = 265,
+    TMAIN = 266,
+    TROTATE = 267,
+    TFORWARD = 268,
+    TATTACK = 269,
+    TSAVELOC = 270,
+    TRANGEDATTACK = 271,
+    TASSIGN = 272,
+    TIF = 273,
+    TELSE = 274,
+    TMEMORY = 275,
+    TINC = 276,
+    TDEC = 277,
+    TISZOMBIE = 278,
+    TISHUMAN = 279,
+    TISRANDOM = 280,
+    TISPASSABLE = 281
+  };
 #endif
 
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE
 {
-/* Line 2058 of yacc.c  */
-#line 16 "zompiler.y"
+#line 16 "zompiler.y" /* yacc.c:1909  */
 
     Node* node;
 	NBlock* block;
@@ -72,29 +87,15 @@ typedef union YYSTYPE
 	std::string* string;
 	int token;
 
-
-/* Line 2058 of yacc.c  */
-#line 78 "parser.hpp"
-} YYSTYPE;
+#line 91 "parser.hpp" /* yacc.c:1909  */
+};
 # define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+
 extern YYSTYPE zompilerlval;
 
-#ifdef YYPARSE_PARAM
-#if defined __STDC__ || defined __cplusplus
-int zompilerparse (void *YYPARSE_PARAM);
-#else
-int zompilerparse ();
-#endif
-#else /* ! YYPARSE_PARAM */
-#if defined __STDC__ || defined __cplusplus
 int zompilerparse (void);
-#else
-int zompilerparse ();
-#endif
-#endif /* ! YYPARSE_PARAM */
 
 #endif /* !YY_ZOMPILER_PARSER_HPP_INCLUDED  */

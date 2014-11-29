@@ -28,8 +28,26 @@ int g_LineNumber = 1;
 ";"						{ return TOKEN(TSEMI); }
 "("						{ return TOKEN(TLPAREN); }
 ")"						{ return TOKEN(TRPAREN); }
+"["						{ return TOKEN(TLBRACKET); }
+"]"						{ return TOKEN(TRBRACKET); }
+"="						{ return TOKEN(TASSIGN); }
 
+"if"					{ return TOKEN(TIF); }
+"else"					{ return TOKEN(TELSE); }
 "rotate"				{ return TOKEN(TROTATE); }
+"forward"				{ return TOKEN(TFORWARD); }
+"is_human"				{ return TOKEN(TISHUMAN); }
+"is_zombie"				{ return TOKEN(TISZOMBIE); }
+"is_passable"			{ return TOKEN(TISPASSABLE); }
+"is_random"				{ return TOKEN(TISRANDOM); }
+"ranged_attack"			{ return TOKEN(TRANGEDATTACK); }
+"attack"				{ return TOKEN(TATTACK); }
+"save_loc"				{ return TOKEN(TSAVELOC); }
+"memory"				{ return TOKEN(TMEMORY); }
+"++"					{ return TOKEN(TINC); }
+"--"					{ return TOKEN(TDEC); }
+
+\/\/.*\n				{ g_LineNumber++; }
 
 %{
 /* Do not add any of your own tokens below this line!!!! */

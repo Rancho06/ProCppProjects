@@ -28,7 +28,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 39
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -73,7 +73,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -103,6 +102,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -172,7 +173,12 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-extern int zompilerleng;
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
+extern yy_size_t zompilerleng;
 
 extern FILE *zompilerin, *zompilerout;
 
@@ -181,6 +187,7 @@ extern FILE *zompilerin, *zompilerout;
 #define EOB_ACT_LAST_MATCH 2
 
     #define YY_LESS_LINENO(n)
+    #define YY_LINENO_REWIND_TO(ptr)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -197,11 +204,6 @@ extern FILE *zompilerin, *zompilerout;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
-
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
 
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
@@ -220,7 +222,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -290,8 +292,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when zompilertext is formed. */
 static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int zompilerleng;
+static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
+yy_size_t zompilerleng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
@@ -319,7 +321,7 @@ static void zompiler_init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 YY_BUFFER_STATE zompiler_scan_buffer (char *base,yy_size_t size  );
 YY_BUFFER_STATE zompiler_scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE zompiler_scan_bytes (yyconst char *bytes,int len  );
+YY_BUFFER_STATE zompiler_scan_bytes (yyconst char *bytes,yy_size_t len  );
 
 void *zompileralloc (yy_size_t  );
 void *zompilerrealloc (void *,yy_size_t  );
@@ -379,8 +381,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 13
-#define YY_END_OF_BUFFER 14
+#define YY_NUM_RULES 30
+#define YY_END_OF_BUFFER 31
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -388,12 +390,21 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[32] =
+static yyconst flex_int16_t yy_accept[114] =
     {   0,
-        0,    0,   14,   12,    1,   10,    7,    8,    2,    6,
-       11,   11,   11,    4,    5,    2,   11,   11,   11,   11,
-       11,   11,   11,   11,   11,   11,    9,   11,   11,    3,
-        0
+        0,    0,   31,   29,    1,   27,    7,    8,   29,   29,
+       29,    2,    6,   11,   28,    9,   10,   28,   28,   28,
+       28,   28,   28,   28,    4,    5,   24,   25,    0,    2,
+       28,   28,   28,   28,   12,   28,   28,   28,   28,   28,
+       28,    0,   26,   28,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   13,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
+       28,   28,   28,   28,   28,   21,   28,   28,   28,   28,
+       28,   28,   23,   28,   14,   28,   15,   28,   28,   28,
+       28,   28,   28,   28,   16,   28,   28,   28,   28,   28,
+
+       22,   28,   19,   17,    3,   28,   28,   28,   18,   28,
+       28,   20,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -402,16 +413,16 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
-        5,    1,    1,    1,    1,    1,    1,    6,    6,    6,
-        6,    6,    6,    6,    6,    6,    6,    1,    7,    1,
-        1,    1,    1,    1,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        1,    1,    1,    1,    9,    1,   10,    8,    8,    8,
+        5,    1,    6,    1,    7,    1,    8,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    1,   10,    1,
+       11,    1,    1,    1,   12,   12,   12,   12,   12,   12,
+       12,   12,   12,   12,   12,   12,   12,   12,   12,   12,
+       12,   12,   12,   12,   12,   12,   12,   12,   12,   12,
+       13,    1,   14,    1,   15,    1,   16,   17,   18,   19,
 
-       11,    8,    8,    8,   12,    8,    8,   13,   14,   15,
-       16,   17,    8,   18,    8,   19,    8,    8,    8,    8,
-        8,    8,   20,    1,   21,    1,    1,    1,    1,    1,
+       20,   21,   22,   23,   24,   12,   25,   26,   27,   28,
+       29,   30,   12,   31,   32,   33,   34,   35,   36,   12,
+       37,   38,   39,    1,   40,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -428,47 +439,92 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[22] =
+static yyconst flex_int32_t yy_meta[41] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    2,    2,    2,
-        2,    2,    2,    2,    2,    2,    2,    2,    2,    1,
-        1
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    2,    1,    1,    2,    2,    2,    2,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2,    1,    1
     } ;
 
-static yyconst flex_int16_t yy_base[33] =
+static yyconst flex_int16_t yy_base[116] =
     {   0,
-        0,    0,   38,   39,   39,   39,   39,   39,   31,   39,
-        0,   26,   19,   39,   39,   28,    0,   21,   13,   16,
-       20,   20,    9,   14,   15,    9,    0,    8,    6,    0,
-       39,   20
+        0,    0,  130,  131,  131,  131,  131,  131,  123,  121,
+      119,  117,  131,  131,    0,  131,  131,   92,   98,   94,
+       20,   26,   27,  106,  131,  131,  131,  131,  118,  111,
+        0,   86,   86,   86,    0,  101,   91,   87,   85,   79,
+       76,  107,  131,   93,   88,   71,   24,   78,   76,   82,
+       87,   82,   83,    0,   84,   65,   82,   81,   67,   80,
+       63,   73,   59,   76,   65,   58,   61,   55,   58,   58,
+       58,   46,   63,   61,   54,    0,   60,   62,   45,   57,
+       58,   45,    0,   58,    0,   43,    0,   43,   54,   40,
+       44,   38,   50,   47,    0,   44,   33,   39,   28,   24,
+
+        0,   27,    0,    0,    0,   18,   30,   33,    0,   30,
+       20,    0,  131,   42,   62
     } ;
 
-static yyconst flex_int16_t yy_def[33] =
+static yyconst flex_int16_t yy_def[116] =
     {   0,
-       31,    1,   31,   31,   31,   31,   31,   31,   31,   31,
-       32,   32,   32,   31,   31,   31,   32,   32,   32,   32,
-       32,   32,   32,   32,   32,   32,   32,   32,   32,   32,
-        0,   31
+      113,    1,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  114,  113,  113,  114,  114,  114,
+      114,  114,  114,  114,  113,  113,  113,  113,  115,  113,
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+      114,  115,  113,  114,  114,  114,  114,  114,  114,  114,
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+
+      114,  114,  114,  114,  114,  114,  114,  114,  114,  114,
+      114,  114,    0,  113,  113
     } ;
 
-static yyconst flex_int16_t yy_nxt[61] =
+static yyconst flex_int16_t yy_nxt[172] =
     {   0,
-        4,    5,    6,    7,    8,    9,   10,   11,   11,   11,
-       11,   11,   11,   12,   11,   11,   11,   13,   11,   14,
-       15,   17,   30,   29,   28,   27,   26,   25,   24,   23,
-       22,   21,   20,   16,   19,   18,   16,   31,    3,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31
+        4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
+       14,   15,   16,   17,   15,   18,   15,   15,   15,   19,
+       20,   15,   15,   21,   15,   15,   22,   15,   15,   15,
+       23,   24,   15,   15,   15,   15,   15,   15,   25,   26,
+       35,   37,   39,   31,  112,   38,   56,  111,  110,  109,
+      108,   36,  107,   57,   58,   40,  106,  105,  104,  103,
+      102,   59,   42,   42,  101,  100,   99,   98,   97,   96,
+       95,   94,   93,   92,   91,   90,   89,   88,   87,   86,
+       85,   84,   83,   82,   81,   80,   79,   78,   77,   76,
+       75,   74,   73,   72,   71,   70,   69,   68,   67,   66,
+
+       65,   64,   63,   62,   61,   60,   55,   54,   53,   43,
+       52,   51,   50,   49,   48,   47,   46,   45,   44,   30,
+       43,   41,   34,   33,   32,   30,   29,   28,   27,  113,
+        3,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113
     } ;
 
-static yyconst flex_int16_t yy_chk[61] =
+static yyconst flex_int16_t yy_chk[172] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,   32,   29,   28,   26,   25,   24,   23,   22,   21,
-       20,   19,   18,   16,   13,   12,    9,    3,   31,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31,
-       31,   31,   31,   31,   31,   31,   31,   31,   31,   31
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+       21,   22,   23,  114,  111,   22,   47,  110,  108,  107,
+      106,   21,  102,   47,   47,   23,  100,   99,   98,   97,
+       96,   47,  115,  115,   94,   93,   92,   91,   90,   89,
+       88,   86,   84,   82,   81,   80,   79,   78,   77,   75,
+       74,   73,   72,   71,   70,   69,   68,   67,   66,   65,
+       64,   63,   62,   61,   60,   59,   58,   57,   56,   55,
+
+       53,   52,   51,   50,   49,   48,   46,   45,   44,   42,
+       41,   40,   39,   38,   37,   36,   34,   33,   32,   30,
+       29,   24,   20,   19,   18,   12,   11,   10,    9,    3,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113,  113,  113,  113,  113,  113,  113,  113,  113,  113,
+      113
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -502,7 +558,7 @@ int g_LineNumber = 1;
 // Disable warnings
 #pragma warning(disable: 4018)
 #pragma warning(disable: 4996)
-#line 506 "scanner.cpp"
+#line 562 "scanner.cpp"
 
 #define INITIAL 0
 
@@ -541,7 +597,7 @@ FILE *zompilerget_out (void );
 
 void zompilerset_out  (FILE * out_str  );
 
-int zompilerget_leng (void );
+yy_size_t zompilerget_leng (void );
 
 char *zompilerget_text (void );
 
@@ -591,7 +647,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( zompilertext, zompilerleng, 1, zompilerout )
+#define ECHO do { if (fwrite( zompilertext, zompilerleng, 1, zompilerout )) {} } while (0)
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -602,7 +658,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( zompilerin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -684,11 +740,6 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 20 "zompiler.l"
-
-
-#line 691 "scanner.cpp"
-
 	if ( !(yy_init) )
 		{
 		(yy_init) = 1;
@@ -715,6 +766,12 @@ YY_DECL
 		zompiler_load_buffer_state( );
 		}
 
+	{
+#line 20 "zompiler.l"
+
+
+#line 774 "scanner.cpp"
+
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
 		yy_cp = (yy_c_buf_p);
@@ -731,7 +788,7 @@ YY_DECL
 yy_match:
 		do
 			{
-			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
 			if ( yy_accept[yy_current_state] )
 				{
 				(yy_last_accepting_state) = yy_current_state;
@@ -740,13 +797,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 32 )
+				if ( yy_current_state >= 114 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 39 );
+		while ( yy_base[yy_current_state] != 131 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -812,34 +869,120 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
+#line 31 "zompiler.l"
+{ return TOKEN(TLBRACKET); }
+	YY_BREAK
+case 10:
+YY_RULE_SETUP
 #line 32 "zompiler.l"
+{ return TOKEN(TRBRACKET); }
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 33 "zompiler.l"
+{ return TOKEN(TASSIGN); }
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 35 "zompiler.l"
+{ return TOKEN(TIF); }
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 36 "zompiler.l"
+{ return TOKEN(TELSE); }
+	YY_BREAK
+case 14:
+YY_RULE_SETUP
+#line 37 "zompiler.l"
 { return TOKEN(TROTATE); }
+	YY_BREAK
+case 15:
+YY_RULE_SETUP
+#line 38 "zompiler.l"
+{ return TOKEN(TFORWARD); }
+	YY_BREAK
+case 16:
+YY_RULE_SETUP
+#line 39 "zompiler.l"
+{ return TOKEN(TISHUMAN); }
+	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 40 "zompiler.l"
+{ return TOKEN(TISZOMBIE); }
+	YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 41 "zompiler.l"
+{ return TOKEN(TISPASSABLE); }
+	YY_BREAK
+case 19:
+YY_RULE_SETUP
+#line 42 "zompiler.l"
+{ return TOKEN(TISRANDOM); }
+	YY_BREAK
+case 20:
+YY_RULE_SETUP
+#line 43 "zompiler.l"
+{ return TOKEN(TRANGEDATTACK); }
+	YY_BREAK
+case 21:
+YY_RULE_SETUP
+#line 44 "zompiler.l"
+{ return TOKEN(TATTACK); }
+	YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 45 "zompiler.l"
+{ return TOKEN(TSAVELOC); }
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 46 "zompiler.l"
+{ return TOKEN(TMEMORY); }
+	YY_BREAK
+case 24:
+YY_RULE_SETUP
+#line 47 "zompiler.l"
+{ return TOKEN(TINC); }
+	YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 48 "zompiler.l"
+{ return TOKEN(TDEC); }
+	YY_BREAK
+case 26:
+/* rule 26 can match eol */
+YY_RULE_SETUP
+#line 50 "zompiler.l"
+{ g_LineNumber++; }
 	YY_BREAK
 
 /* Do not add any of your own tokens below this line!!!! */
 
-case 10:
-/* rule 10 can match eol */
+case 27:
+/* rule 27 can match eol */
 YY_RULE_SETUP
-#line 38 "zompiler.l"
+#line 56 "zompiler.l"
 { g_LineNumber++; }
 	YY_BREAK
-case 11:
+case 28:
 YY_RULE_SETUP
-#line 40 "zompiler.l"
+#line 58 "zompiler.l"
 { std::cout << "ERROR: Unknown token '" << zompilertext << "' on line " << g_LineNumber << std::endl; yyterminate(); }
 	YY_BREAK
-case 12:
+case 29:
 YY_RULE_SETUP
-#line 42 "zompiler.l"
+#line 60 "zompiler.l"
 { std::cout << "ERROR: Unknown token '" << zompilertext << "' on line " << g_LineNumber << std::endl; yyterminate(); }
 	YY_BREAK
-case 13:
+case 30:
 YY_RULE_SETUP
-#line 44 "zompiler.l"
+#line 62 "zompiler.l"
 ECHO;
 	YY_BREAK
-#line 843 "scanner.cpp"
+#line 986 "scanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -970,6 +1113,7 @@ case YY_STATE_EOF(INITIAL):
 			"fatal flex scanner internal error--no action found" );
 	} /* end of action switch */
 		} /* end of scanning one token */
+	} /* end of user's declarations */
 } /* end of zompilerlex */
 
 /* yy_get_next_buffer - try to read in a new buffer
@@ -1025,21 +1169,21 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
 
 			int yy_c_buf_p_offset =
 				(int) ((yy_c_buf_p) - b->yy_ch_buf);
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1070,7 +1214,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), (size_t) num_to_read );
+			(yy_n_chars), num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1131,7 +1275,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 32 )
+			if ( yy_current_state >= 114 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1159,13 +1303,13 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 32 )
+		if ( yy_current_state >= 114 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 31);
+	yy_is_jam = (yy_current_state == 113);
 
-	return yy_is_jam ? 0 : yy_current_state;
+		return yy_is_jam ? 0 : yy_current_state;
 }
 
     static void yyunput (int c, register char * yy_bp )
@@ -1180,7 +1324,7 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		register int number_to_move = (yy_n_chars) + 2;
+		register yy_size_t number_to_move = (yy_n_chars) + 2;
 		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		register char *source =
@@ -1229,7 +1373,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			int offset = (yy_c_buf_p) - (yytext_ptr);
+			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1389,10 +1533,6 @@ static void zompiler_load_buffer_state  (void)
 	zompilerfree((void *) b  );
 }
 
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
-    
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a zompilerrestart() or at EOF.
@@ -1505,7 +1645,7 @@ void zompilerpop_buffer_state (void)
  */
 static void zompilerensure_buffer_stack (void)
 {
-	int num_to_alloc;
+	yy_size_t num_to_alloc;
     
 	if (!(yy_buffer_stack)) {
 
@@ -1597,17 +1737,17 @@ YY_BUFFER_STATE zompiler_scan_string (yyconst char * yystr )
 
 /** Setup the input buffer state to scan the given bytes. The next call to zompilerlex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE zompiler_scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
+YY_BUFFER_STATE zompiler_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
@@ -1689,7 +1829,7 @@ FILE *zompilerget_out  (void)
 /** Get the length of the current token.
  * 
  */
-int zompilerget_leng  (void)
+yy_size_t zompilerget_leng  (void)
 {
         return zompilerleng;
 }
@@ -1837,7 +1977,7 @@ void zompilerfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 44 "zompiler.l"
+#line 62 "zompiler.l"
 
 
 

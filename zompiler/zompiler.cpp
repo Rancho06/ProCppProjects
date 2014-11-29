@@ -16,7 +16,22 @@ int _tmain(int argc, _TCHAR* argv[])
 	zompilerparse();
 
 	// TODO: CodeGen from g_MainBlock
-
+	CodeContext myContext;
+	if (g_MainBlock != nullptr) {
+		g_MainBlock->CodeGen(myContext);
+	}
+	std::ofstream of("out.zom");
+	if (of.is_open()) {
+		for (unsigned int i = 0; i < myContext.m_Ops.size(); i++) {
+			if (i == 0) {
+				of << myContext.m_Ops[0];
+			}
+			else {
+				of << std::endl << myContext.m_Ops[i];
+			}
+		}
+	}
+	of.close();
 	_getch();
 	return 0;
 }

@@ -1,0 +1,12 @@
+mem,0
+set,5
+rotate,0
+mem,0
+dec
+forward
+mem,0
+dec
+rotate,1
+mem,0
+inc
+goto,1
