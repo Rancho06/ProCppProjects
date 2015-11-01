@@ -1,8 +1,7 @@
 # Advanced C++ Course Projects #
 
 ### Author ###
-Name: Shu Zhou
-Email: shuzhou@usc.edu
+Shu Zhou(shuzhou@usc.edu)
 
 ### Directories ###
 * rle - Run-length Encoding Compressor
