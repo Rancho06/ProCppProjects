@@ -1,15 +1,14 @@
-# ITP 435 Labs - Fall 2014 #
+# Advanced C++ Course Projects #
 
-### PUT YOUR INFO HERE ###
+### Author ###
 Name: Shu Zhou
-
 Email: shuzhou@usc.edu
 
 ### Directories ###
-* rle - Lab 1
-* password - Lab 2
-* draw - Lab 3
-* zombie - Lab 4
-* zompiler - Lab 5
-* include - Headers used in labs 3 and 4. Do not edit.
+* rle - Run-length Encoding Compressor
+* password - Cracking Passwords using Concurrency
+* draw - Drawing Tools using Windows Template Libary(WTL)
+* zombie - Human-Zombie War Simulator
+* zompiler - Writing a Compiler for Zombie Language
+* include - Header Files.
 * cygwin - Installer for cygwin, if necessary.
